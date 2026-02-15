@@ -1,5 +1,5 @@
 import { Button, Checkbox, Label, TextInput } from 'flowbite-react';
-import Loadable from 'src/layouts/full/shared/loadable/Loadable';
+import Spinner from 'src/views/spinner/Spinner';
 import { Link, useNavigate } from 'react-router';
 import React, { useState, useEffect } from 'react';
 import apiService from '../../../Api/Axios';
@@ -7,6 +7,7 @@ import apiService from '../../../Api/Axios';
 const AuthLogin = () => {
   const navigate = useNavigate();
 
+  const [loadeer, setLoader] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -15,14 +16,10 @@ const AuthLogin = () => {
     email?: string;
     password?: string;
   };
-  const [showSuccess, setShowSuccess] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
 
   useEffect(() => {
     const auth = localStorage.getItem('auth');
-    if (auth) {
-      setShowSuccess(true);
-    }
   }, []);
 
   const validate = (): FormErrors => {
@@ -50,10 +47,10 @@ const AuthLogin = () => {
       return;
     }
     setErrors({});
+    setLoader(true);
     const response = await apiService.request('post', '/auth/login', formData);
-    // assuming axios response structure
     const token = response?.token;
-    console.log(token);
+    setLoader(false);
 
     if (token) {
       localStorage.setItem(
@@ -62,15 +59,20 @@ const AuthLogin = () => {
           token,
         }),
       );
-      setShowSuccess(true);
     } else if (response?.errors) {
       setErrors(response.errors);
     }
-    // navigate('/');
+    navigate('/dashboard');
   };
 
   return (
     <>
+      {loadeer && (
+        <div className='absolute bg-white/80 inset-0 z-10'>
+
+          <Spinner/>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <div className="mb-2 block">
