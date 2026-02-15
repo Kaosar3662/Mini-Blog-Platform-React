@@ -1,0 +1,12 @@
+
+import { Link } from 'react-router';
+
+const Logo = () => {
+  return (
+    <Link to={'/'}>
+      <h1 className="text-primary">Mini-Blog</h1>
+    </Link>
+  );
+}
+
+export default Logo
