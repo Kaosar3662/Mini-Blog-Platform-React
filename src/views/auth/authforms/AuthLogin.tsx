@@ -49,7 +49,7 @@ const AuthLogin = () => {
     setErrors({});
     setLoader(true);
     const response = await apiService.request('post', '/auth/login', formData);
-    const token = response?.token;
+    const token = response?.data?.token;
     setLoader(false);
 
     if (token) {
@@ -59,10 +59,11 @@ const AuthLogin = () => {
           token,
         }),
       );
+       navigate('/dashboard');
     } else if (response?.errors) {
       setErrors(response.errors);
     }
-    navigate('/dashboard');
+   
   };
 
   return (

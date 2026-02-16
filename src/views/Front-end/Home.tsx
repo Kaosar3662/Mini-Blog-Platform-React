@@ -8,6 +8,8 @@ import React, { useState, useEffect } from 'react';
 // import BlogCard from "../../components/BlogCard";
 import Pagination from '../../components/frontend/pagination';
 import apiService from '../../Api/Axios';
+import { Link } from "react-router";
+import { Button } from "flowbite-react";
 
 const Home: React.FC = () => {
   const [posts, setPosts] = useState([]);
@@ -70,6 +72,10 @@ const Home: React.FC = () => {
    ))}
       </BlogList>
       */}
+        <Link to={'/auth/login'}>
+          <Button>Login</Button>
+        </Link>
+        <h1 className="text-primary text-[70px] my-10">This is Home</h1>
 
         <div className="mt-6 ">
           <Pagination

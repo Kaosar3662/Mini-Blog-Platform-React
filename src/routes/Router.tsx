@@ -25,6 +25,7 @@ const Solar = Loadable(lazy(() => import("../views/icons/Solar")));
 const Login = Loadable(lazy(() => import('../views/auth/login/Login')));
 const Register = Loadable(lazy(() => import('../views/auth/register/Register')));
 const SamplePage = Loadable(lazy(() => import('../views/sample-page/SamplePage')));
+const Categories = Loadable(lazy(() => import('../views/sample-page/Categories')));
 const Error = Loadable(lazy(() => import('../views/auth/error/Error')));
 
 const Router = [
@@ -51,6 +52,7 @@ const Router = [
       { path: '/ui/buttons', exact: true, element: <Buttons /> },
       { path: '/icons/solar', exact: true, element: <Solar /> },
       { path: '/sample-page', exact: true, element: <SamplePage /> },
+      { path: '/categories', exact: true, element: <Categories /> },
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },
