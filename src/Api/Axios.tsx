@@ -1,27 +1,78 @@
-import axios, { AxiosRequestConfig, Method } from 'axios';
+import React, { createContext, useContext, useState } from 'react';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import Spinner from 'src/views/spinner/Spinner';
+import { Alert } from 'flowbite-react';
 
-interface AuthStorage {
-  token?: string;
-}
+type UIContextType = {
+  loader: boolean;
+  setLoader: (value: boolean) => void;
+  alert: string | null;
+  setAlert: (message: string | null) => void;
+};
 
-const getAuthToken = (): string | null => {
+const UIContext = createContext<UIContextType | undefined>(undefined);
+
+export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [loader, setLoader] = useState(false);
+  const [alert, setAlert] = useState<string | null>(null);
+
+  return (
+    <UIContext.Provider value={{ loader, setLoader, alert, setAlert }}>
+      {children}
+      <ErrorAndLoader />
+    </UIContext.Provider>
+  );
+};
+
+export const useUI = (): UIContextType => {
+  const context = useContext(UIContext);
+  if (!context) {
+    throw new Error('useUI must be used within a UIProvider');
+  }
+  return context;
+};
+
+type ErrorAndLoaderProps = {
+  alertType?: 'success' | 'error';
+};
+
+export const ErrorAndLoader: React.FC<ErrorAndLoaderProps> = ({ alertType }) => {
+  const { loader, alert, setAlert } = useUI();
+
+  return (
+    <>
+      {loader && (
+        <div className="fixed inset-0 flex items-center justify-center bg-white/80 z-50">
+          <Spinner />
+        </div>
+      )}
+      {alert && (
+        <div className="fixed top-5 right-5 z-50 cursor-pointer" onClick={() => setAlert(null)}>
+          <Alert className="rounded-lg --color-primary text-black">{alert}</Alert>
+        </div>
+      )}
+    </>
+  );
+};
+
+const axiosInstance = axios.create({
+  baseURL: 'http://127.0.0.1:8000/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+const getAuthToken = () => {
   const auth = localStorage.getItem('auth');
   if (!auth) return null;
-  const LS: AuthStorage = JSON.parse(auth);
+  const LS = JSON.parse(auth);
   return LS.token || null;
 };
 
-const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api',
-  headers: { Accept: 'application/json' },
-});
-
-api.interceptors.request.use((config) => {
+axiosInstance.interceptors.request.use((config) => {
   const token = getAuthToken();
 
-  config.headers = (config.headers ?? {}) as any;
-
   if (token) {
+    config.headers = config.headers ?? {};
     config.headers.Authorization = `Bearer ${token}`;
   }
 
@@ -34,31 +85,33 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-interface RequestConfig extends AxiosRequestConfig {}
-
-const apiService = {
+export const apiService = {
   request: async <T = any,>(
-    method: Method,
-    endpoint: string,
-    data: any = null,
-    config: RequestConfig = {},
-  ): Promise<T | null> => {
+    method: AxiosRequestConfig['method'],
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig,
+    setLoader?: (value: boolean) => void,
+    setAlert?: (message: string | null) => void,
+  ): Promise<T | { errors?: any; success?: boolean; data?: any }> => {
+    if (setLoader) setLoader(true);
     try {
-      const response = await api({
+      const response = await axiosInstance.request<T>({
         method,
-        url: endpoint,
-        ...(method.toLowerCase() === 'get' ? { params: data } : { data }),
+        url,
+        data,
         ...config,
       });
-
-      return response.data as T;
-    } catch (e: any) {
-      if (e.response?.data?.message) {
-        console.error(e.response.data.message);
+      if (setLoader) setLoader(false);
+      return response.data;
+    } catch (error: any) {
+      if (setLoader) setLoader(false);
+      if (error.response) {
+        return error.response.data;
+      } else {
+        if (setAlert) setAlert('Network error. Please try again later.');
+        return { success: false, errors: { general: 'Network error' } };
       }
-      return null;
     }
   },
 };
-
-export default apiService;

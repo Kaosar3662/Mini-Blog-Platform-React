@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import apiService from "../../Api/Axios";
-import { TextInput, Button } from "flowbite-react";
+import { useEffect, useState } from 'react';
+import { apiService, useUI } from '../../Api/Axios';
+import { TextInput, Button } from 'flowbite-react';
 
 interface Category {
   id: number;
@@ -12,15 +12,27 @@ interface CategoriesResponse {
 
 const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState<string>('');
   const [editId, setEditId] = useState<number | null>(null);
-  const [editName, setEditName] = useState<string>("");
+  const [editName, setEditName] = useState<string>('');
+  const { setAlert, setLoader } = useUI();
 
   const fetchCategories = async () => {
-    const res = await apiService.request<CategoriesResponse>('get', 'admin/categories');
-    if (res) {
+    setLoader(true);
+    const res = await apiService.request<CategoriesResponse>(
+      'get',
+      'admin/categories',
+      {},
+      {},
+      setLoader,
+    );
+    if (res && 'success' in res && res.success) {
       setCategories(res.data);
+    } else {
+      setAlert('Failed to fetch categories');
     }
+
+    setLoader(false);
   };
 
   useEffect(() => {
@@ -30,26 +42,52 @@ const Categories = () => {
   const handleCreate = async () => {
     if (!name.trim()) return;
 
-    await apiService.request("post", "admin/categories", { name });
-    setName("");
-    fetchCategories();
+    setLoader(true);
+
+    const res = await apiService.request('post', 'admin/categories', { name }, {}, setLoader);
+    if (res && 'success' in res && res.success) {
+      setAlert('Category created successfully');
+      setName('');
+      fetchCategories();
+    } else {
+      setAlert('Failed to create category');
+    }
+    setLoader(false);
   };
 
   const handleUpdate = async (id: number) => {
     if (!editName.trim()) return;
 
-    await apiService.request("put", `admin/categories/${id}`, {
-      name: editName,
-    });
+    setLoader(true);
 
-    setEditId(null);
-    setEditName("");
-    fetchCategories();
+    const res = await apiService.request(
+      'put',
+      `admin/categories/${id}`,
+      { name: editName },
+      {},
+      setLoader,
+    );
+    if (res && 'success' in res && res.success) {
+      setAlert('Category updated successfully');
+      setEditId(null);
+      setEditName('');
+      fetchCategories();
+    } else {
+      setAlert('Failed to update category');
+    }
+    setLoader(false);
   };
 
   const handleDelete = async (id: number) => {
-    await apiService.request("delete", `admin/categories/${id}`);
-    fetchCategories();
+    setLoader(true);
+    const res = await apiService.request('delete', `admin/categories/${id}`, {}, {}, setLoader);
+    if (res && 'success' in res && res.success) {
+      setAlert('Category deleted successfully');
+      fetchCategories();
+    } else {
+      setAlert('Failed to delete category');
+    }
+    setLoader(false);
   };
 
   return (
@@ -67,7 +105,7 @@ const Categories = () => {
         {categories.map((cat) => (
           <div
             key={cat.id}
-            className="flex items-center justify-between py-2 px-5 rounded-lg bg-white shadow-md "
+            className="flex items-center justify-between py-2 px-5 rounded-lg bg-white shadow-md"
           >
             {editId === cat.id ? (
               <TextInput value={editName} onChange={(e) => setEditName(e.target.value)} />

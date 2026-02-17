@@ -1,26 +1,22 @@
-import { Button, Checkbox, Label, TextInput } from 'flowbite-react';
-import Spinner from 'src/views/spinner/Spinner';
+import { Button, Label, TextInput } from 'flowbite-react';
 import { Link, useNavigate } from 'react-router';
-import React, { useState, useEffect } from 'react';
-import apiService from '../../../Api/Axios';
+import React, { useState } from 'react';
+import { apiService, useUI } from '../../../Api/Axios';
 
 const AuthLogin = () => {
   const navigate = useNavigate();
-
-  const [loadeer, setLoader] = useState(false)
+  const { setAlert, setLoader } = useUI();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+
   type FormErrors = {
     email?: string;
     password?: string;
+    general?: string;
   };
   const [errors, setErrors] = useState<FormErrors>({});
-
-  useEffect(() => {
-    const auth = localStorage.getItem('auth');
-  }, []);
 
   const validate = (): FormErrors => {
     const newErrors: FormErrors = {};
@@ -47,33 +43,29 @@ const AuthLogin = () => {
       return;
     }
     setErrors({});
-    setLoader(true);
-    const response = await apiService.request('post', '/auth/login', formData);
-    const token = response?.data?.token;
-    setLoader(false);
+    const response = await apiService.request('post', '/auth/login', formData, {}, setLoader);
 
-    if (token) {
-      localStorage.setItem(
-        'auth',
-        JSON.stringify({
-          token,
-        }),
-      );
-       navigate('/dashboard');
-    } else if (response?.errors) {
-      setErrors(response.errors);
+    if ('success' in response) {
+      if (response.success === true && response.data?.token) {
+        localStorage.setItem(
+          'auth',
+          JSON.stringify({
+            token: response.data.token,
+          }),
+        );
+        navigate('/dashboard');
+      } else if (response.errors) {
+        setErrors(response.errors);
+      } else if (response.success === false) {
+        setAlert(response.message);
+      }
+    } else {
+      setAlert('Something went wrong. try again Later');
     }
-   
   };
 
   return (
     <>
-      {loadeer && (
-        <div className='absolute bg-white/80 inset-0 z-10'>
-
-          <Spinner/>
-        </div>
-      )}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <div className="mb-2 block">
@@ -108,12 +100,6 @@ const AuthLogin = () => {
           {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
         </div>
         <div className="flex justify-between my-5">
-          {/* <div className="flex items-center gap-2">
-            <Checkbox id="accept" className="checkbox" />
-            <Label htmlFor="accept" className="opacity-90 font-normal cursor-pointer">
-              Remeber this Device
-            </Label>
-          </div> */}
           <Link to={'/'} className="text-primary text-sm font-medium">
             Forgot Password ?
           </Link>

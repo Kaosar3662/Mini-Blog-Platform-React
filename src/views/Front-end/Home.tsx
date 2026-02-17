@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 // import BlogList from "../../components/BlogList";
 // import BlogCard from "../../components/BlogCard";
 import Pagination from '../../components/frontend/pagination';
-import apiService from '../../Api/Axios';
+import{apiService} from '../../Api/Axios';
 import { Link } from "react-router";
 import { Button } from "flowbite-react";
 

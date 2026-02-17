@@ -1,4 +1,3 @@
-import { Link } from 'react-router';
 import ProductCards from 'src/components/dashboard/ProductCards';
 import ProductSales from 'src/components/dashboard/ProductSales';
 import RecentTransactionCard from 'src/components/dashboard/RecentTransactions';
@@ -9,7 +8,7 @@ import TrafficDistribution from 'src/components/dashboard/TrafficDistribution';
 const Dashboard = () => {
   return (
     <>
-      <div className="grid grid-cols-12 gap-6">
+      <div className="grid grid-cols-12 gap-6 pb-5">
         <div className="lg:col-span-8 col-span-12">
           <SalesProfit />
         </div>
@@ -32,19 +31,6 @@ const Dashboard = () => {
         <div className="col-span-12">
           <ProductCards />
         </div>
-      </div>
-
-      <div className="text-center pt-8 ">
-        <p className="text-base  text-dark/80">
-          Design and Developed by{' '}
-          <Link
-            to="https://wrappixel.com/"
-            target="_blank"
-            className="pl-1 text-primary underline decoration-primary"
-          >
-            wrappixel.com
-          </Link>
-        </p>
       </div>
     </>
   );
