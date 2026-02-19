@@ -1,141 +1,220 @@
 import { useEffect, useState } from 'react';
 import { apiService, useUI } from '../../Api/Axios';
 import { TextInput, Button } from 'flowbite-react';
+import Search from '../../components/frontend/Search';
+import Pagination from '../../components/frontend/pagination';
 
 interface Category {
   id: number;
   name: string;
 }
-interface CategoriesResponse {
-  data: Category[];
-}
 
 const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [name, setName] = useState<string>('');
+  const [name, setName] = useState('');
   const [editId, setEditId] = useState<number | null>(null);
-  const [editName, setEditName] = useState<string>('');
+  const [editName, setEditName] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<'create' | 'edit' | null>(null);
+
   const { setAlert, setLoader } = useUI();
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 2;
 
   const fetchCategories = async () => {
     setLoader(true);
-    const res = await apiService.request<CategoriesResponse>(
+    const offset = (currentPage - 1) * limit;
+
+    const res: any = await apiService.request(
       'get',
       'admin/categories',
       {},
-      {},
+      {
+        params: { limit, offset, search: searchTerm },
+      },
       setLoader,
+      setAlert,
     );
-    if (res && 'success' in res && res.success) {
-      setCategories(res.data);
-    } else {
-      setAlert('Failed to fetch categories');
-    }
 
     setLoader(false);
+
+    const list = Array.isArray(res?.data) ? res.data : res?.data?.data || [];
+
+    setCategories(list);
+
+    const totalItems = typeof res.data.total === 'number' ? res.data.total : list.length;
+    setTotalPages(Math.ceil(totalItems / limit));
   };
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [currentPage, searchTerm]);
+
+  const openCreateModal = () => {
+    setName('');
+    setModalType('create');
+    setModalOpen(true);
+  };
+
+  const openEditModal = (cat: Category) => {
+    setEditId(cat.id);
+    setEditName(cat.name);
+    setModalType('edit');
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setModalType(null);
+    setEditId(null);
+    setEditName('');
+    setName('');
+  };
 
   const handleCreate = async () => {
     if (!name.trim()) return;
+    const res: any = await apiService.request(
+      'post',
+      'admin/categories',
+      { name },
+      {},
+      setLoader,
+      setAlert,
+    );
 
-    setLoader(true);
-
-    const res = await apiService.request('post', 'admin/categories', { name }, {}, setLoader);
-    if (res && 'success' in res && res.success) {
-      setAlert('Category created successfully');
-      setName('');
+    if (res && res.success) {
+      setCurrentPage(1);
       fetchCategories();
-    } else {
-      setAlert('Failed to create category');
+      closeModal();
     }
-    setLoader(false);
   };
 
   const handleUpdate = async (id: number) => {
     if (!editName.trim()) return;
-
-    setLoader(true);
-
-    const res = await apiService.request(
+    const res: any = await apiService.request(
       'put',
       `admin/categories/${id}`,
       { name: editName },
       {},
       setLoader,
+      setAlert,
     );
-    if (res && 'success' in res && res.success) {
-      setAlert('Category updated successfully');
-      setEditId(null);
-      setEditName('');
+
+    if (res && res.success) {
       fetchCategories();
-    } else {
-      setAlert('Failed to update category');
+      closeModal();
     }
-    setLoader(false);
   };
 
   const handleDelete = async (id: number) => {
-    setLoader(true);
-    const res = await apiService.request('delete', `admin/categories/${id}`, {}, {}, setLoader);
-    if (res && 'success' in res && res.success) {
-      setAlert('Category deleted successfully');
-      fetchCategories();
-    } else {
-      setAlert('Failed to delete category');
-    }
-    setLoader(false);
+    const res: any = await apiService.request(
+      'delete',
+      `admin/categories/${id}`,
+      {},
+      {},
+      setLoader,
+      setAlert,
+    );
+
+    if (res && res.success) fetchCategories();
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex gap-2">
-        <TextInput
-          placeholder="Category name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+    
+    <div className="flex flex-col space-y-6">
+      <div className="flex items-center justify-between gap-4 w-full">
+        <Search
+          searchTerm={searchTerm}
+          onSearch={(value) => {
+            setSearchTerm(value);
+            setCurrentPage(1);
+          }}
         />
-        <Button onClick={handleCreate}>Create</Button>
+        <Button onClick={openCreateModal}>Create a New Category</Button>
       </div>
 
-      <div className="flex flex-col gap-3">
-        {categories.map((cat) => (
+      {categories.length === 0 ? (
+        <div className="flex items-center justify-center h-48">
+          <span className="text-gray-500 text-lg">No categories found.</span>
+        </div>
+      ) : (
+        <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-sm font-semibold">Category Name</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map((cat) => (
+              <tr key={cat.id} className="bg-white hover:bg-gray-100">
+                <td className="px-6 py-4">{cat.name}</td>
+                <td className="flex gap-2 px-6 py-4">
+                  <Button size="xs" onClick={() => openEditModal(cat)}>
+                    Edit
+                  </Button>
+                  <Button size="xs" color="error" onClick={() => handleDelete(cat.id)}>
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
+
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-40">
           <div
-            key={cat.id}
-            className="flex items-center justify-between py-2 px-5 rounded-lg bg-white shadow-md"
+            className="bg-white p-6 w-full max-w-md rounded-lg"
+            style={{ borderRadius: 'var(--radius-lg)' }}
+            onClick={(e) => e.stopPropagation()}
           >
-            {editId === cat.id ? (
-              <TextInput value={editName} onChange={(e) => setEditName(e.target.value)} />
-            ) : (
-              <span>{cat.name}</span>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">
+                {modalType === 'create' ? 'Create' : 'Edit'}
+              </h3>
+              <button onClick={closeModal} className="text-xl font-bold">
+                &times;
+              </button>
+            </div>
+
+            {modalType === 'create' && (
+              <>
+                <TextInput
+                  placeholder="Category name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="mb-4"
+                />
+                <Button onClick={handleCreate}>Create</Button>
+              </>
             )}
 
-            <div className="flex gap-2">
-              {editId === cat.id ? (
-                <Button size="xs" onClick={() => handleUpdate(cat.id)}>
-                  Save
-                </Button>
-              ) : (
-                <Button
-                  size="xs"
-                  onClick={() => {
-                    setEditId(cat.id);
-                    setEditName(cat.name);
-                  }}
-                >
-                  Edit
-                </Button>
-              )}
-              <Button size="xs" color="error" onClick={() => handleDelete(cat.id)}>
-                Delete
-              </Button>
-            </div>
+            {modalType === 'edit' && editId !== null && (
+              <>
+                <TextInput
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  className="mb-4"
+                />
+                <Button onClick={() => handleUpdate(editId)}>Save</Button>
+              </>
+            )}
           </div>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

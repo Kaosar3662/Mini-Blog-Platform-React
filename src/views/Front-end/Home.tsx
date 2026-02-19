@@ -7,9 +7,9 @@ import React, { useState, useEffect } from 'react';
 // import BlogList from "../../components/BlogList";
 // import BlogCard from "../../components/BlogCard";
 import Pagination from '../../components/frontend/pagination';
-import{apiService} from '../../Api/Axios';
-import { Link } from "react-router";
-import { Button } from "flowbite-react";
+import { apiService } from '../../Api/Axios';
+import { Link } from 'react-router';
+import { Button } from 'flowbite-react';
 
 const Home: React.FC = () => {
   const [posts, setPosts] = useState([]);
@@ -18,23 +18,27 @@ const Home: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const ContentPerPage = 10;
 
+  const getAuthToken = () => {
+    const auth = localStorage.getItem('auth');
+    if (!auth) return null;
+    const LS = JSON.parse(auth);
+    return LS.token || null;
+  };
+  const authToken = getAuthToken();
   useEffect(() => {
     let canceled = false;
+
     const fetchPosts = async () => {
-      try {
-        const offset = (currentPage - 1) * ContentPerPage;
-        //  const data = await apiService({ search: searchTerm });
-        //  if (canceled) return;
-        //  const allPosts = data.data.posts || [];
-        //  const start = (currentPage - 1) * ContentPerPage;
-        //  const end = start + ContentPerPage;
-        //  setPosts(allPosts.slice(start, end));
-        // setTotalPages(Math.ceil(allPosts.length / ContentPerPage) || 1);
-        const allPosts = 500
-        setTotalPages(Math.ceil(allPosts/ContentPerPage) || 10);
-      } catch (error) {
-        if (!canceled) setPosts([]);
-      }
+      const offset = (currentPage - 1) * ContentPerPage;
+      //  const data = await apiService({ search: searchTerm });
+      //  if (canceled) return;
+      //  const allPosts = data.data.posts || [];
+      //  const start = (currentPage - 1) * ContentPerPage;
+      //  const end = start + ContentPerPage;
+      //  setPosts(allPosts.slice(start, end));
+      // setTotalPages(Math.ceil(allPosts.length / ContentPerPage) || 1);
+      const allPosts = 500;
+      setTotalPages(Math.ceil(allPosts / ContentPerPage) || 10);
     };
     fetchPosts();
     return () => {
@@ -72,9 +76,15 @@ const Home: React.FC = () => {
    ))}
       </BlogList>
       */}
-        <Link to={'/auth/login'}>
-          <Button>Login</Button>
-        </Link>
+        {authToken ? (
+          <Link to={'/dashboard'}>
+            <Button>Dashboard</Button>
+          </Link>
+        ) : (
+          <Link to={'/auth/login'}>
+            <Button>Login</Button>
+          </Link>
+        )}
         <h1 className="text-primary text-[70px] my-10">This is Home</h1>
 
         <div className="mt-6 ">

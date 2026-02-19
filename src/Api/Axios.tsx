@@ -1,20 +1,20 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import Spinner from 'src/views/spinner/Spinner';
-import { Alert } from 'flowbite-react';
+import Toaster from 'src/components/alerts/Toaster';
 
 type UIContextType = {
   loader: boolean;
   setLoader: (value: boolean) => void;
-  alert: string | null;
-  setAlert: (message: string | null) => void;
+  alert: { message: string; type: 'success' | 'error' } | null;
+  setAlert: (value: { message: string; type: 'success' | 'error' } | null) => void;
 };
 
 const UIContext = createContext<UIContextType | undefined>(undefined);
 
 export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [loader, setLoader] = useState(false);
-  const [alert, setAlert] = useState<string | null>(null);
+  const [alert, setAlert] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   return (
     <UIContext.Provider value={{ loader, setLoader, alert, setAlert }}>
@@ -32,12 +32,8 @@ export const useUI = (): UIContextType => {
   return context;
 };
 
-type ErrorAndLoaderProps = {
-  alertType?: 'success' | 'error';
-};
-
-export const ErrorAndLoader: React.FC<ErrorAndLoaderProps> = ({ alertType }) => {
-  const { loader, alert, setAlert } = useUI();
+export const ErrorAndLoader: React.FC = () => {
+  const { loader, alert } = useUI();
 
   return (
     <>
@@ -46,11 +42,7 @@ export const ErrorAndLoader: React.FC<ErrorAndLoaderProps> = ({ alertType }) => 
           <Spinner />
         </div>
       )}
-      {alert && (
-        <div className="fixed top-5 right-5 z-50 cursor-pointer" onClick={() => setAlert(null)}>
-          <Alert className="rounded-lg --color-primary text-black">{alert}</Alert>
-        </div>
-      )}
+      {alert && <Toaster message={alert.message} type={alert.type} />}
     </>
   );
 };
@@ -61,6 +53,7 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
 const getAuthToken = () => {
   const auth = localStorage.getItem('auth');
   if (!auth) return null;
@@ -92,7 +85,8 @@ export const apiService = {
     data?: any,
     config?: AxiosRequestConfig,
     setLoader?: (value: boolean) => void,
-    setAlert?: (message: string | null) => void,
+    setAlert?: (value: { message: string; type: 'success' | 'error' } | null) => void,
+    setErrors?: (errors: Record<string, string>) => void,
   ): Promise<T | { errors?: any; success?: boolean; data?: any }> => {
     if (setLoader) setLoader(true);
     try {
@@ -102,14 +96,49 @@ export const apiService = {
         data,
         ...config,
       });
+      const res: any = response.data;
+
       if (setLoader) setLoader(false);
+
+      // handle form field errors
+      if (setErrors && res.errors) {
+        setErrors(res.errors);
+      }
+
+      // Success alerts and normal error
+      if (setAlert && res?.message && (!res.errors || Object.keys(res.errors).length === 0)) {
+        if (res.success === !true) {
+          setAlert({ message: res.message, type: 'error' });
+        }
+      }
+
       return response.data;
     } catch (error: any) {
       if (setLoader) setLoader(false);
       if (error.response) {
-        return error.response.data;
+        const res = error.response.data;
+
+        // Validation errors
+        if (setErrors && res.errors) {
+          setErrors(res.errors);
+        }
+
+        // Error alerts
+        if (setAlert && res?.message) {
+          setAlert({
+            message: res.message,
+            type: 'error',
+          });
+        }
+
+        return res;
       } else {
-        if (setAlert) setAlert('Network error. Please try again later.');
+        if (setAlert) {
+          setAlert({
+            message: 'Network error. Please try again later.',
+            type: 'error',
+          });
+        }
         return { success: false, errors: { general: 'Network error' } };
       }
     }

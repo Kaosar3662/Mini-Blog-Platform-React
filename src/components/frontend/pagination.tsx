@@ -5,9 +5,9 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
-  const btnBase = 'px-2 py-1 border rounded transition-colors';
-  const btnActive = 'bg-blue-600 text-white font-bold cursor-default';
-  const btnInactive = 'bg-black text-white hover:bg-blue-600 cursor-pointer';
+  const btnBase = 'px-2 py-1 border rounded-lg transition-colors font-sans';
+  const btnActive = 'bg-[var(--color-primary)] text-white font-bold cursor-default shadow-[var(--shadow-md)]';
+  const btnInactive = 'bg-[var(--color-dark)] text-white hover:bg-[var(--color-primary)] cursor-pointer shadow-[var(--shadow-md)]';
   const btnDisabled = 'bg-gray-300 text-gray-500 opacity-50 cursor-not-allowed';
 
   const handlePrev = () => {
@@ -29,7 +29,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   };
 
   return (
-    <div className="flex gap-2 items-center justify-center">
+    <div className="flex gap-2 items-center justify-center" style={{ fontFamily: 'var(--font-sans)' }}>
       {/* Prev Button */}
       <button
         onClick={handlePrev}

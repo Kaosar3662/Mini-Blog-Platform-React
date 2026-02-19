@@ -1,7 +1,8 @@
 import { Button, Label, TextInput } from 'flowbite-react';
 import { Link, useNavigate } from 'react-router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { apiService, useUI } from '../../../Api/Axios';
+import { isLoggedIn } from '../checklogin/checklogin';
 
 const AuthLogin = () => {
   const navigate = useNavigate();
@@ -11,24 +12,19 @@ const AuthLogin = () => {
     password: '',
   });
 
+  useEffect(() => {
+    if (isLoggedIn()) {
+      navigate('/dashboard');
+    }
+  }, []);
+
   type FormErrors = {
     email?: string;
     password?: string;
     general?: string;
   };
+
   const [errors, setErrors] = useState<FormErrors>({});
-
-  const validate = (): FormErrors => {
-    const newErrors: FormErrors = {};
-    if (!formData.email.trim()) newErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
-
-    if (!formData.password) newErrors.password = 'Password is required';
-    else if (formData.password.length < 6)
-      newErrors.password = 'Password must be at least 6 characters';
-
-    return newErrors;
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -37,30 +33,24 @@ const AuthLogin = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    setErrors({});
-    const response = await apiService.request('post', '/auth/login', formData, {}, setLoader);
+    const response = await apiService.request(
+      'post',
+      '/auth/login',
+      formData,
+      {},
+      setLoader,
+      setAlert,
+      setErrors,
+    );
 
-    if ('success' in response) {
-      if (response.success === true && response.data?.token) {
-        localStorage.setItem(
-          'auth',
-          JSON.stringify({
-            token: response.data.token,
-          }),
-        );
-        navigate('/dashboard');
-      } else if (response.errors) {
-        setErrors(response.errors);
-      } else if (response.success === false) {
-        setAlert(response.message);
-      }
-    } else {
-      setAlert('Something went wrong. try again Later');
+    if (response.success === true && response.data?.token) {
+      localStorage.setItem(
+        'auth',
+        JSON.stringify({
+          token: response.data.token,
+        }),
+      );
+      navigate('/dashboard');
     }
   };
 
