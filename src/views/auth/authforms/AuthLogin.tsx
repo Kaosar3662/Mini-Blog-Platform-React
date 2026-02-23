@@ -1,6 +1,6 @@
 import { Button, Label, TextInput } from 'flowbite-react';
 import { useNavigate } from 'react-router';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { apiService, useUI } from '../../../Api/Axios';
 
 type LoginFormData = {

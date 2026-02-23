@@ -76,20 +76,7 @@ const Home: React.FC = () => {
    ))}
       </BlogList>
       */}
-        {authToken ? (
-          <Link to={'/dashboard'}>
-            <Button>Dashboard</Button>
-          </Link>
-        ) : (
-          <div>
-            <Link to={'/auth/login'}>
-              <Button>Login</Button>
-            </Link>
-            <Link to={'/auth/register'}>
-              <Button>Register</Button>
-            </Link>
-          </div>
-        )}
+
         <h1 className="text-primary text-[70px] my-10">This is Home</h1>
 
         <div className="mt-6 ">
