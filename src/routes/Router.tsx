@@ -11,9 +11,9 @@ const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')))
 // Main
 const Dashboard = Loadable(lazy(() => import('../views/dashboards/Dashboard')));
 const Home = Loadable(lazy(() => import('../views/Front-end/Home')));
+const Thanks = Loadable(lazy(() => import('../views/Front-end/Thanksforregister')));
 
 // utilities
-const Table = Loadable(lazy(() => import("../views/tables/Table")));
 const Form = Loadable(lazy(() => import("../views/forms/Form")));
 const Alert = Loadable(lazy(() => import("../views/alerts/Alerts")));
 const Buttons = Loadable(lazy(() => import("../views/buttons/Buttons")));
@@ -25,9 +25,10 @@ const Solar = Loadable(lazy(() => import("../views/icons/Solar")));
 const Login = Loadable(lazy(() => import('../views/auth/login/Login')));
 const Register = Loadable(lazy(() => import('../views/auth/register/Register')));
 const SamplePage = Loadable(lazy(() => import('../views/sample-page/SamplePage')));
-const Categories = Loadable(lazy(() => import('../views/sample-page/Categories')));
 const Error = Loadable(lazy(() => import('../views/auth/error/Error')));
-
+// Pages
+const Categories = Loadable(lazy(() => import('../views/dashboards/Categories')));
+const Users = Loadable(lazy(() => import('../views/dashboards/UsersPage')));
 const Router = [
   {
     path: '/',
@@ -36,6 +37,7 @@ const Router = [
       { path: '/', exact: true, element: <Home /> },
       { path: '/auth/login', element: <Login /> },
       { path: '/auth/register', element: <Register /> },
+      { path: '/thanksforregistering', element: <Thanks /> },
       { path: '404', element: <Error /> },
       { path: '/auth/404', element: <Error /> },
       { path: '*', element: <Navigate to="/auth/404" /> },
@@ -46,13 +48,13 @@ const Router = [
     element: <FullLayout />,
     children: [
       { path: '/dashboard', exact: true, element: <Dashboard /> },
-      { path: '/ui/table', exact: true, element: <Table /> },
       { path: '/ui/form', exact: true, element: <Form /> },
       { path: '/ui/alert', exact: true, element: <Alert /> },
       { path: '/ui/buttons', exact: true, element: <Buttons /> },
       { path: '/icons/solar', exact: true, element: <Solar /> },
       { path: '/sample-page', exact: true, element: <SamplePage /> },
       { path: '/categories', exact: true, element: <Categories /> },
+      { path: '/users', exact: true, element: <Users /> },
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },

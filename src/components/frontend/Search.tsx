@@ -22,8 +22,8 @@ const Search: React.FC<SearchProps> = ({ searchTerm, onSearch }) => {
       type="text"
       value={localTerm}
       onChange={handleDebounce}
-      placeholder="Search products..."
-      aria-label="Search products"
+      placeholder="Search..."
+      aria-label="Search"
       className="
         w‑full max-w-125 px-5 py-2 border rounded-lg border-primary
       "

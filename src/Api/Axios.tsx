@@ -100,18 +100,6 @@ export const apiService = {
 
       if (setLoader) setLoader(false);
 
-      // handle form field errors
-      if (setErrors && res.errors) {
-        setErrors(res.errors);
-      }
-
-      // Success alerts and normal error
-      if (setAlert && res?.message && (!res.errors || Object.keys(res.errors).length === 0)) {
-        if (res.success === !true) {
-          setAlert({ message: res.message, type: 'error' });
-        }
-      }
-
       return response.data;
     } catch (error: any) {
       if (setLoader) setLoader(false);
@@ -123,12 +111,10 @@ export const apiService = {
           setErrors(res.errors);
         }
 
-        // Error alerts
-        if (setAlert && res?.message) {
-          setAlert({
-            message: res.message,
-            type: 'error',
-          });
+        if (setAlert && res?.message && (!res.errors || Object.keys(res.errors).length === 0)) {
+          if (res.success === !true) {
+            setAlert({ message: res.message, type: 'error' });
+          }
         }
 
         return res;

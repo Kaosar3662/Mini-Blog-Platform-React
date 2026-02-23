@@ -2,9 +2,15 @@
 import { Button, Dropdown, DropdownItem } from "flowbite-react";
 import { Icon } from "@iconify/react";
 import user1 from "/src/assets/images/profile/user-1.jpg";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const Profile = () => {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+      localStorage.removeItem('auth');
+      navigate('/');
+    };
   return (
     <div className="relative group/menu">
       <Dropdown
@@ -13,17 +19,10 @@ const Profile = () => {
         dismissOnClick={false}
         renderTrigger={() => (
           <span className="h-10 w-10 hover:text-primary hover:bg-lightprimary rounded-full flex justify-center items-center cursor-pointer group-hover/menu:bg-lightprimary group-hover/menu:text-primary">
-            <img
-              src={user1}
-              alt="logo"
-              height="35"
-              width="35"
-              className="rounded-full"
-            />
+            <img src={user1} alt="logo" height="35" width="35" className="rounded-full" />
           </span>
         )}
       >
-
         <DropdownItem
           as={Link}
           to="#"
@@ -32,24 +31,15 @@ const Profile = () => {
           <Icon icon="solar:user-circle-outline" height={20} />
           My Profile
         </DropdownItem>
-        <DropdownItem
-          as={Link}
-          to="#"
-          className="px-3 py-3 flex items-center bg-hover group/link w-full gap-3 text-dark"
-        >
-          <Icon icon="solar:letter-linear" height={20} />
-          My Account
-        </DropdownItem>
-        <DropdownItem
-          as={Link}
-          to="/"
-          className="px-3 py-3 flex items-center bg-hover group/link w-full gap-3 text-dark"
-        >
-          <Icon icon="solar:checklist-linear" height={20} />
-          My Task
-        </DropdownItem>
+    
         <div className="p-3 pt-0">
-        <Button as={Link}  size={'sm'}  to="/auth/login" className="mt-2 border border-primary text-primary bg-transparent hover:bg-lightprimary outline-none focus:outline-none">Logout</Button>
+          <Button
+            size={'sm'}
+            onClick={handleLogout}
+            className="mt-2 border border-primary text-primary bg-transparent hover:bg-lightprimary outline-none focus:outline-none"
+          >
+            Logout
+          </Button>
         </div>
       </Dropdown>
     </div>

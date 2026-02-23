@@ -30,7 +30,7 @@ const SidebarContent: MenuItem[] = [
         name: 'Dashboard',
         icon: 'solar:widget-add-line-duotone',
         id: uniqueId(),
-        url: '/',
+        url: '/dashboard',
         isPro: false,
       },
       {

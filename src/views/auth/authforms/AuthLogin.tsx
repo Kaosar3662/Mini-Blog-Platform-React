@@ -48,6 +48,7 @@ const AuthLogin = () => {
         'auth',
         JSON.stringify({
           token: response.data.token,
+          role: response.data.role,
         }),
       );
       navigate('/dashboard');
