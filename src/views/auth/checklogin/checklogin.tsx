@@ -6,7 +6,6 @@ export const isLoggedIn = (): boolean => {
     const LS = JSON.parse(auth);
     return !!LS.token;
   } catch (e) {
-    console.error('Failed to parse auth from localStorage', e);
     return false;
   }
 };

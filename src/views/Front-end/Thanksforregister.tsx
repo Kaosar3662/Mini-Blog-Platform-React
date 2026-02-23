@@ -7,7 +7,7 @@ const ThanksForRegister: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[100vh] px-4">
+    <div className="flex flex-col items-center justify-center pt-20 px-4 min-h-[calc(100vh-64px)]">
       <Card className="max-w-lg w-full text-center p-8 bg-white shadow-md rounded-xl">
         <div className="flex justify-center mb-6">
           <div className="bg-primary-100 p-5 rounded-full shadow-lg">
