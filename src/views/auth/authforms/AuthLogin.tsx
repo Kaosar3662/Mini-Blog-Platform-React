@@ -38,6 +38,8 @@ const AuthLogin: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    setErrors({});
+    setAlert(null);
     const response = await apiService.request(
       'post',
       '/auth/login',
@@ -46,6 +48,7 @@ const AuthLogin: React.FC = () => {
       setLoader,
       setAlert,
       setErrors,
+      true,
     );
 
     if (response?.success && response?.data?.token) {
@@ -56,7 +59,10 @@ const AuthLogin: React.FC = () => {
           role: response.data.role,
         }),
       );
-      navigate('/dashboard');
+
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 2000);
     }
   };
 
@@ -72,6 +78,8 @@ const AuthLogin: React.FC = () => {
   const handleForgotSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setErrors({});
+    setAlert(null);
     const res = await apiService.request(
       'post',
       'auth/password/forgot',
@@ -86,8 +94,11 @@ const AuthLogin: React.FC = () => {
       setAlert,
       setErrors,
     );
+
     if (res.success == true) {
-      navigate('/resetpasssent');
+      setTimeout(() => {
+        navigate('/resetpasssent');
+      }, 2000);
     }
   };
 

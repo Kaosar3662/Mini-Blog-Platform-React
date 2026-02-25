@@ -28,7 +28,8 @@ const ResetPasswordSent: React.FC = () => {
 
   const handleForgotSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setErrors({});
+    setAlert(null);
     await apiService.request(
       'post',
       'auth/password/forgot',

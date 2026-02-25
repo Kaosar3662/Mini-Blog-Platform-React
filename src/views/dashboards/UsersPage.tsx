@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { TextInput, Button, Select } from 'flowbite-react';
 import { apiService, useUI } from '../../Api/Axios';
 import Pagination from '../../components/frontend/Pagination';
+import Search from '../../components/frontend/Search';
 
 interface User {
   id: number;
@@ -36,7 +37,8 @@ const UsersPage: React.FC = () => {
 
   const fetchUsers = async () => {
     const offset = (currentPage - 1) * limit;
-
+    setErrors({});
+    setAlert(null);
     const res: any = await apiService.request(
       'get',
       'admin/users',
@@ -46,8 +48,8 @@ const UsersPage: React.FC = () => {
           limit,
           offset,
           search: searchTerm,
-          role: roleFilter || undefined,
-          status: statusFilter || undefined,
+          role: roleFilter,
+          status: statusFilter,
         },
       },
       setLoader,
@@ -68,7 +70,8 @@ const UsersPage: React.FC = () => {
 
   const handleUpdate = async () => {
     if (!editUser) return;
-
+    setErrors({});
+    setAlert(null);
     const success = await apiService.request(
       'post',
       `admin/user/${editUser.email}`,
@@ -98,11 +101,10 @@ const UsersPage: React.FC = () => {
         <h2 className="text-2xl font-semibold">Users</h2>
 
         <div className="flex gap-3 flex-wrap">
-          <TextInput
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
+          <Search
+            searchTerm={searchTerm}
+            onSearch={(value) => {
+              setSearchTerm(value);
               setCurrentPage(1);
             }}
           />
@@ -113,7 +115,7 @@ const UsersPage: React.FC = () => {
               setRoleFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-auto min-w-[160px]"
+            className="w-auto min-w-40"
           >
             <option value="">All Roles</option>
             <option value="moderator">Moderator</option>
@@ -126,7 +128,7 @@ const UsersPage: React.FC = () => {
               setStatusFilter(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-auto min-w-[160px]"
+            className="w-auto min-w-40"
           >
             <option value="">All Status </option>
             <option value="active">Active </option>

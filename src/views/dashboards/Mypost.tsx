@@ -30,7 +30,7 @@ const Mypost: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const limit = 2;
+  const limit = 10;
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -49,6 +49,8 @@ const Mypost: React.FC = () => {
 
   const fetchPosts = async (page = 1, search = '', status = '') => {
     const offset = (page - 1) * limit;
+
+    setAlert(null);
     const res: any = await apiService.request(
       'get',
       'blogger/posts',
@@ -71,6 +73,7 @@ const Mypost: React.FC = () => {
   const handleDelete = async (slug: string) => {
     if (!window.confirm('Are you sure you want to delete this post?')) return;
 
+    setAlert(null);
     const res: any = await apiService.request(
       'delete',
       `blogger/posts/${slug}`,

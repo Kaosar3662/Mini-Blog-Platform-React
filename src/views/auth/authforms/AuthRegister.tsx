@@ -30,6 +30,8 @@ const AuthRegister: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    setErrors({});
+    setAlert(null);
     const response = await apiService.request(
       'post',
       'auth/register',
@@ -39,7 +41,6 @@ const AuthRegister: React.FC = () => {
       setAlert,
       setErrors,
     );
-
 
     if (response.success === true) {
       navigate('/thanksforregistering');

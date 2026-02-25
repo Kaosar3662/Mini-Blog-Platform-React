@@ -34,6 +34,7 @@ const Categories = () => {
     setLoader(true);
     const offset = (currentPage - 1) * limit;
 
+    setAlert(null);
     const res: any = await apiService.request(
       'get',
       'admin/categories',
@@ -43,6 +44,7 @@ const Categories = () => {
       },
       setLoader,
       setAlert,
+
     );
 
     setLoader(false);
@@ -83,6 +85,8 @@ const Categories = () => {
 
   const handleCreate = async () => {
     if (!name.trim()) return;
+    setErrors({});
+    setAlert(null);
     const res: any = await apiService.request(
       'post',
       'admin/categories',
@@ -102,6 +106,8 @@ const Categories = () => {
 
   const handleUpdate = async (id: number) => {
     if (!editName.trim()) return;
+    setErrors({});
+    setAlert(null);
     const res: any = await apiService.request(
       'put',
       `admin/categories/${id}`,
@@ -119,6 +125,7 @@ const Categories = () => {
   };
 
   const handleDelete = async (id: number) => {
+        setAlert(null);
     const res: any = await apiService.request(
       'delete',
       `admin/categories/${id}`,
@@ -207,14 +214,14 @@ const Categories = () => {
 
             {modalType === 'create' && (
               <>
-                <div className='flex flex-col mb-4'>
-                <TextInput
-                  placeholder="Category name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="mb-1"
-                />
-                {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+                <div className="flex flex-col mb-4">
+                  <TextInput
+                    placeholder="Category name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="mb-1"
+                  />
+                  {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
                 </div>
                 <Button onClick={handleCreate}>Create</Button>
               </>
@@ -222,13 +229,13 @@ const Categories = () => {
 
             {modalType === 'edit' && editId !== null && (
               <>
-                  <div className='flex flex-col mb-4'>
-                <TextInput
-                  value={editName}
-                  onChange={(e) => setEditName(e.target.value)}
-                  className="mb-1"
-                />
-                {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+                <div className="flex flex-col mb-4">
+                  <TextInput
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    className="mb-1"
+                  />
+                  {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
                 </div>
                 <Button onClick={() => handleUpdate(editId)}>Save</Button>
               </>

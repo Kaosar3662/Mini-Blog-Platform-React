@@ -87,6 +87,8 @@ export const apiService = {
     setLoader?: (value: boolean) => void,
     setAlert?: (value: { message: string; type: 'success' | 'error' } | null) => void,
     setErrors?: (errors: Record<string, string>) => void,
+    showSuccessAlert?: boolean,
+    p0?: boolean,
   ): Promise<T | { errors?: any; success?: boolean; data?: any }> => {
     if (setLoader) setLoader(true);
     try {
@@ -100,6 +102,12 @@ export const apiService = {
 
       if (setLoader) setLoader(false);
 
+      if (showSuccessAlert && setAlert && res?.message && !res.errors) {
+        if (res.success === true) {
+          setAlert({ message: res.message, type: 'success' });
+        }
+      }
+
       return response.data;
     } catch (error: any) {
       if (setLoader) setLoader(false);
@@ -111,10 +119,13 @@ export const apiService = {
           setErrors(res.errors);
         }
 
-        if (setAlert && res?.message && (!res.errors || Object.keys(res.errors).length === 0)) {
+        if (setAlert && res?.message && !res.errors) {
           if (res.success === !true) {
             setAlert({ message: res.message, type: 'error' });
           }
+        }
+        if (setAlert && !res.success) {
+          setAlert({ message: res.message, type: 'error' });
         }
 
         return res;

@@ -18,7 +18,7 @@ interface FormErrors {
 }
 
 const Contact: React.FC = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [form, setForm] = useState<ContactForm>({
     name: '',
     email: '',
@@ -38,7 +38,8 @@ const Contact: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
+    setErrors({});
+    setAlert(null);
     const response = await apiService.request(
       'post',
       'contact',
@@ -50,7 +51,7 @@ const Contact: React.FC = () => {
     );
 
     if (response.success === true) {
-      debugger
+      debugger;
       setForm({
         name: '',
         email: '',
@@ -69,10 +70,7 @@ const Contact: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-md px-8 py-10 text-center max-w-md w-full">
             <h1 className="text-3xl font-semibold mb-6">Thank You ☺️</h1>
             <p>We will reach you back soon</p>
-            <Button
-              onClick={() => navigate(`/}`)}
-              className="mt-6 w-full rounded-2xl"
-            >
+            <Button onClick={() => navigate(`/}`)} className="mt-6 w-full rounded-2xl">
               Go Home
             </Button>
           </div>

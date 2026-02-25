@@ -46,6 +46,8 @@ const ResetPass: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setErrors({});
+    setAlert(null);
     const response = await apiService.request(
       'post',
       'auth/password/reset',

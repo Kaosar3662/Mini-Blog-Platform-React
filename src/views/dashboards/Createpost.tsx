@@ -31,6 +31,7 @@ const CreateBlog: React.FC = () => {
 
   useEffect(() => {
     const fetchCategories = async () => {
+      setAlert(null);
       const response = await apiService.request(
         'get',
         'categories',
@@ -38,7 +39,7 @@ const CreateBlog: React.FC = () => {
         {},
         setLoader,
         setAlert,
-        () => {}
+        () => {},
       );
 
       if (response?.success) {
@@ -53,6 +54,8 @@ const CreateBlog: React.FC = () => {
     if (!slug) return;
 
     const fetchPost = async () => {
+      setErrors({});
+      setAlert(null);
       const response = await apiService.request(
         'get',
         `blogger/posts/${slug}`,
@@ -60,7 +63,7 @@ const CreateBlog: React.FC = () => {
         {},
         setLoader,
         setAlert,
-        setErrors
+        setErrors,
       );
 
       if (response?.success) {
@@ -106,7 +109,8 @@ const CreateBlog: React.FC = () => {
     if (formData.cover_image) {
       data.append('cover_image', formData.cover_image);
     }
-
+    setErrors({});
+    setAlert(null);
     const response = await apiService.request(
       slug ? 'put' : 'post',
       slug ? `blogger/posts/${slug}` : 'blogger/posts',

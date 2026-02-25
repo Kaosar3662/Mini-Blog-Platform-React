@@ -29,12 +29,15 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   };
 
   return (
-    <div className="flex gap-2 items-center justify-center" style={{ fontFamily: 'var(--font-sans)' }}>
+    <div
+      className="flex gap-2 items-center justify-center"
+      style={{ fontFamily: 'var(--font-sans)' }}
+    >
       {/* Prev Button */}
       <button
         onClick={handlePrev}
         disabled={currentPage === 1}
-        className={`${btnBase} ${currentPage === 1 ? btnDisabled : btnInactive}`}
+        className={`${btnBase} ${currentPage === 1 ? btnDisabled : btnInactive} px-3`}
       >
         Prev
       </button>
@@ -57,7 +60,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
       <button
         onClick={handleNext}
         disabled={currentPage === totalPages}
-        className={`${btnBase} ${currentPage === totalPages ? btnDisabled : btnInactive}`}
+        className={`${btnBase} ${currentPage === totalPages ? btnDisabled : btnInactive} px-3`}
       >
         Next
       </button>

@@ -12,6 +12,7 @@ const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')))
 const Dashboard = Loadable(lazy(() => import('../views/dashboards/Dashboard')));
 const Categories = Loadable(lazy(() => import('../views/dashboards/Categories')));
 const Createblog = Loadable(lazy(() => import('../views/dashboards/Createpost')));
+const ContactMessage = Loadable(lazy(() => import('../views/dashboards/Contactmesssage')));
 const Myposts = Loadable(lazy(() => import('../views/dashboards/Mypost')));
 const Users = Loadable(lazy(() => import('../views/dashboards/UsersPage')));
 
@@ -41,7 +42,7 @@ const Router = [
     path: '/',
     element: <BlankLayout />,
     children: [
-      { path: '/home', exact: true, element: <Home /> },
+      { path: '/', exact: true, element: <Home /> },
       { path: '/auth/login', element: <Login /> },
       { path: '/auth/register', element: <Register /> },
       { path: '/thanksforregistering', element: <Thanks /> },
@@ -62,6 +63,7 @@ const Router = [
       { path: '/ui/buttons', exact: true, element: <Buttons /> },
       { path: '/icons/solar', exact: true, element: <Solar /> },
       { path: '/categories', exact: true, element: <Categories /> },
+      { path: '/cmessage', exact: true, element: <ContactMessage /> },
       { path: '/newpost', exact: true, element: <Createblog /> },
       { path: '/myposts', exact: true, element: <Myposts /> },
       { path: '/newpost/:slug', exact: true, element: <Createblog /> },

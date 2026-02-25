@@ -34,6 +34,9 @@ const VerifyEmail: React.FC = () => {
     if (!token) return;
 
     const verifyEmail = async () => {
+;
+      setErrors({});
+      setAlert(null);
       const response = await apiService.request(
         'post',
         'auth/email/verify',
@@ -47,7 +50,7 @@ const VerifyEmail: React.FC = () => {
       if (response?.success) {
         navigate('auth/login');
       }
-        setLinkExpired(true);
+      setLinkExpired(true);
     };
 
     verifyEmail();
@@ -55,7 +58,8 @@ const VerifyEmail: React.FC = () => {
 
   const handleResendSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setErrors({});
+    setAlert(null);
     const response = await apiService.request(
       'post',
       'auth/email/resend',
@@ -66,13 +70,13 @@ const VerifyEmail: React.FC = () => {
       setErrors,
     );
 
-  if (response?.success) {
-    navigate('/auth/login');
-  }
+    if (response?.success) {
+      navigate('/auth/login');
+    }
 
-  if (response?.code === 400 || response?.code === 404) {
-    setLinkExpired(true);
-  }
+    if (response?.code === 400 || response?.code === 404) {
+      setLinkExpired(true);
+    }
   };
 
   return (
@@ -94,12 +98,12 @@ const VerifyEmail: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-md p-8 max-w-md w-full mx-4 text-center">
             <h2 className="text-xl font-semibold text-gray-800 mb-3">Resend Verification</h2>
             <form onSubmit={handleResendSubmit} className="flex flex-col gap-4">
-              <div className='flex flex-col gap-2 items-start w-full'>
+              <div className="flex flex-col gap-2 items-start w-full">
                 <Label htmlFor="email">Email</Label>
                 <TextInput
                   id="email"
                   type="email"
-                  className='w-full'
+                  className="w-full"
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
