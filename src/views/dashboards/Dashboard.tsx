@@ -6,6 +6,7 @@ import TopPayingClients from 'src/components/dashboard/TopPayingClients';
 import TrafficDistribution from 'src/components/dashboard/TrafficDistribution';
 
 const Dashboard = () => {
+
   return (
     <>
       <div className="grid grid-cols-12 gap-6 pb-5">

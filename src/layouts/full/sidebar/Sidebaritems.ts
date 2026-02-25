@@ -60,20 +60,27 @@ const SidebarContent: MenuItem[] = [
     ],
   },
   {
-    heading: 'Post',
+    heading: 'Posts',
     children: [
       {
-        name: 'All Post',
+        name: 'All Blog',
         icon: 'mdi:file-document-multiple-outline',
         id: uniqueId(),
         url: '/posts',
         isPro: false,
       },
       {
-        name: 'Pending Post',
+        name: 'My Blogs',
         icon: 'mdi:clock-outline',
         id: uniqueId(),
-        url: '/pposts',
+        url: '/myposts',
+        isPro: false,
+      },
+      {
+        name: 'Create a Blog',
+        icon: 'mdi:clock-outline',
+        id: uniqueId(),
+        url: '/newpost',
         isPro: false,
       },
     ],
