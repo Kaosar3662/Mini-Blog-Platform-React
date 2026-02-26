@@ -22,6 +22,7 @@ export interface MenuItem {
 }
 
 import { uniqueId } from 'lodash';
+import { getAuth } from '../../../views/auth/Middleware/Authmiddleware';
 
 const SidebarContent: MenuItem[] = [
   {
@@ -87,4 +88,35 @@ const SidebarContent: MenuItem[] = [
   },
 ];
 
-export default SidebarContent;
+function getSidebarItems(): MenuItem[] {
+  const auth = getAuth();
+  const role = auth?.role?.toLowerCase() || '';
+
+  function filterChildren(children: ChildItem[]): ChildItem[] {
+    return children.filter((item) => {
+      const name = item.name;
+
+      // Admin gets everything
+      if (role === 'admin') return true;
+
+      // Moderator: Everything except Users
+      if (role === 'moderator') {
+        return name !== 'Users';
+      }
+
+      // Blogger: Only Dashboard, My Blogs, and Create a Blog
+      if (role === 'blogger') {
+        const bloggerAllowed = ['Dashboard', 'My Blogs', 'Create a Blog'];
+        return bloggerAllowed.includes(name || '');
+      }
+      return false;
+    });
+  }
+  return SidebarContent.map((menu) => {
+    if (menu.children) {
+      return { ...menu, children: filterChildren(menu.children) };
+    }
+    return menu;
+  }).filter((menu) => menu.children && menu.children.length > 0);
+}
+export { getSidebarItems };

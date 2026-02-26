@@ -95,7 +95,7 @@ const Contactmesssage = () => {
         </div>
 
         <div className="rounded-2xl w-full">
-          <table className=" w-full bg-white rounded-2xl shadow-md overflow-x-auto">
+          <table className=" w-full bg-white rounded-2xl shadow-md overflow-x-auto md:overflow-clip">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-sm font-semibold">Name</th>

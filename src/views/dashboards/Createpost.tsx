@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, TextInput, Textarea, Label } from 'flowbite-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { apiService, useUI } from '../../Api/Axios';
+import { HiTrash } from 'react-icons/hi';
 
 interface Errors {
   title?: string;
@@ -127,8 +128,8 @@ const CreateBlog: React.FC = () => {
   };
 
   return (
-    <div className="relative overflow-hidden pt-20 flex min-h-[calc(100vh-64px)] justify-center items-start px-4">
-      <div className="w-full max-w-3xl bg-white dark:bg-darkgray rounded-2xl shadow-md p-8">
+    <div className="relative overflow-hidden pt-10 flex justify-center items-start">
+      <div className="w-full bg-white dark:bg-darkgray rounded-2xl shadow-md p-8">
         <h2 className="text-2xl font-semibold mb-6">{slug ? 'Edit Blog' : 'Create Blog'}</h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -196,26 +197,43 @@ const CreateBlog: React.FC = () => {
             )}
           </div>
 
-          <div>
+          <div className='relative'>
             <Label htmlFor="cover_image">Cover Image</Label>
+            {formData.cover_image && (
+              <Button
+                type="button"
+                color="failure"
+                className="absolute top-4 right-6 flex items-center gap-2"
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    cover_image: null,
+                  }))
+                }
+              >
+                <HiTrash className="w-4 h-4" />
+                Remove Image
+              </Button>
+            )}
             <input
               id="cover_image"
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              className="block w-full text-sm text-gray-500
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-xl file:border-0
-              file:text-sm file:font-semibold
-              file:bg-primary file:text-white
-              hover:file:opacity-90"
+              className="block w-full text-sm text-gray-500 cursor-pointer
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-xl file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-primary file:text-white
+                        file:cursor-pointer
+                        hover:file:opacity-90"
             />
             {formData.cover_image && (
-              <div className="mt-4 flex justify-center">
+              <div className=" relative mt-4 flex flex-col items-start gap-3">
                 <img
                   src={URL.createObjectURL(formData.cover_image)}
                   alt="Preview"
-                  className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
+                  className="w-full max-w-60 rounded-xl shadow-md object-cover"
                 />
               </div>
             )}

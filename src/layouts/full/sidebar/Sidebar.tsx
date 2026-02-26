@@ -1,14 +1,12 @@
-
-import {  Sidebar, SidebarItemGroup, SidebarItems } from "flowbite-react";
-import SidebarContent from "./Sidebaritems";
-import NavItems from "./NavItems";
-import SimpleBar from "simplebar-react";
-import React from "react";
-import FullLogo from "../shared/logo/FullLogo";
-import NavCollapse from "./NavCollapse";
+import { Sidebar, SidebarItemGroup, SidebarItems } from 'flowbite-react';
+import { getSidebarItems } from './Sidebaritems';
+import NavItems from './NavItems';
+import SimpleBar from 'simplebar-react';
+import FullLogo from '../shared/logo/FullLogo';
+import NavCollapse from './NavCollapse';
 
 const SidebarLayout = () => {
-
+  const SidebarContent = getSidebarItems();
 
   return (
     <>
@@ -22,29 +20,25 @@ const SidebarLayout = () => {
           </div>
           <SimpleBar className="h-[calc(100vh)]">
             <SidebarItems className=" mt-2">
-              <SidebarItemGroup
-               className="sidebar-nav hide-menu">
-                {SidebarContent &&
-                  SidebarContent?.map((item, index) => (
-                    <div className="caption" key={item.heading}>
-                      <React.Fragment key={index}>
-                        <h5 className="text-dark/60 uppercase font-medium leading-6 text-xs pb-2 ps-6">
-                          {item.heading}
-                        </h5>
-                        {item.children?.map((child, index) => (
-                        <React.Fragment key={child.id && index}>
-                          {child.children ? (
-                            <div className="collpase-items">
-                              <NavCollapse item={child} />
-                            </div>
-                          ) : (
-                            <NavItems item={child} />
-                          )}
-                        </React.Fragment>
-                      ))}
-                      </React.Fragment>
-                    </div>
-                  ))}
+              <SidebarItemGroup className="sidebar-nav hide-menu">
+                {SidebarContent.map((item) => (
+                  <div key={item.heading}>
+                    <h5 className="text-dark/60 uppercase font-medium leading-6 text-xs pb-2 ps-6">
+                      {item.heading}
+                    </h5>
+                    {item.children?.map((child) =>
+                      child.children ? (
+                        <div className="collpase-items cursor-pointer">
+                          <NavCollapse item={child} />
+                        </div>
+                      ) : (
+                        <div className="cursor-pointer">
+                          <NavItems item={child} />
+                        </div>
+                      ),
+                    )}
+                  </div>
+                ))}
               </SidebarItemGroup>
             </SidebarItems>
           </SimpleBar>

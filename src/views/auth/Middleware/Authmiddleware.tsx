@@ -20,6 +20,7 @@ type Props = {
 };
 
 const ProtectedRoute = ({ children, allowedRoles }: Props) => {
+  debugger
   const auth = getAuth();
   const role = auth?.role || null;
 

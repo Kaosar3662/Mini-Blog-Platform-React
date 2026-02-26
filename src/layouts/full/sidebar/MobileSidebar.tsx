@@ -1,6 +1,6 @@
 
 import { Sidebar, SidebarItemGroup, SidebarItems } from "flowbite-react";
-import SidebarContent from "./Sidebaritems";
+import { getSidebarItems } from "./Sidebaritems";
 import NavItems from "./NavItems";
 import SimpleBar from "simplebar-react";
 import React from "react";
@@ -8,6 +8,7 @@ import FullLogo from "../shared/logo/FullLogo";
 import 'simplebar-react/dist/simplebar.min.css';
 
 const MobileSidebar = () => {
+const SidebarContent = getSidebarItems();
   return (
     <>
       <div>

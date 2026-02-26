@@ -28,7 +28,6 @@ const Contact = Loadable(lazy(() => import('../views/Front-end/Contact')));
 const Thanks = Loadable(lazy(() => import('../views/Front-end/Thanksforregister')));
 const Resetsent = Loadable(lazy(() => import('../views/Front-end/ResetPassSend')));
 
-
 const adminRoutes = [{ path: '/users', element: <Users /> }];
 
 const moderatorRoutes = [
@@ -44,21 +43,24 @@ const bloggerRoutes = [
 
 const CommonRoutes = [{ path: '/dashboard', element: <Dashboard /> }];
 
+const adminOnly = ['admin'];
+const modAndAbove = ['admin', 'moderator'];
+const allStaff = ['admin', 'moderator', 'blogger'];
+
 const protectedRoutesMapping = [
   {
-    allowedRoles: ['admin'],
-    routes: [...adminRoutes, ...moderatorRoutes, ...bloggerRoutes, ...CommonRoutes],
+    allowedRoles: adminOnly,
+    routes: [...adminRoutes],
   },
   {
-    allowedRoles: ['moderator'],
-    routes: [...moderatorRoutes, ...bloggerRoutes, ...CommonRoutes],
+    allowedRoles: modAndAbove,
+    routes: [...moderatorRoutes],
   },
   {
-    allowedRoles: ['blogger'],
+    allowedRoles: allStaff,
     routes: [...bloggerRoutes, ...CommonRoutes],
   },
 ];
-
 
 const protectedRoutes = protectedRoutesMapping.flatMap((group) =>
   group.routes.map((r) => ({
