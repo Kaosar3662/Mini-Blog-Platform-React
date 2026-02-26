@@ -1,14 +1,14 @@
-
-import FullLogo from "src/layouts/full/shared/logo/FullLogo";
-import AuthRegister from "../authforms/AuthRegister";
-import { Link } from "react-router";
+import FullLogo from 'src/layouts/full/shared/logo/FullLogo';
+import AuthRegister from '../authforms/AuthRegister';
+import { Link } from 'react-router-dom';
 
 const gradientStyle = {
-  background: "linear-gradient(45deg, rgb(238, 119, 82,0.2), rgb(231, 60, 126,0.2), rgb(35, 166, 213,0.2), rgb(35, 213, 171,0.2))",
-  backgroundSize: "400% 400%",
-  animation: "gradient 15s ease infinite",
-  height: "100vh",
-  overflow: "hidden",
+  background:
+    'linear-gradient(45deg, rgb(238, 119, 82,0.2), rgb(231, 60, 126,0.2), rgb(35, 166, 213,0.2), rgb(35, 213, 171,0.2))',
+  backgroundSize: '400% 400%',
+  animation: 'gradient 15s ease infinite',
+  height: '100vh',
+  overflow: 'hidden',
 };
 
 const BoxedRegister = () => {

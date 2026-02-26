@@ -4,7 +4,7 @@ import img3 from '/src/assets/images/products/s7.jpg';
 import img4 from '/src/assets/images/products/s11.jpg';
 import { Button, Rating, RatingStar } from 'flowbite-react';
 
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import CardBox from '../shared/CardBox';
 import { IconBasket } from '@tabler/icons-react';
 

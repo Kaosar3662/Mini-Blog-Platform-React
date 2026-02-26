@@ -94,8 +94,8 @@ const Contactmesssage = () => {
           </Select>
         </div>
 
-        <div className="overflow-x-auto w-full">
-          <table className=" w-full bg-white rounded-2xl shadow-md overflow-hidden">
+        <div className="rounded-2xl w-full">
+          <table className=" w-full bg-white rounded-2xl shadow-md overflow-x-auto">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-sm font-semibold">Name</th>
@@ -155,7 +155,7 @@ const Contactmesssage = () => {
               From: {selectedMessage?.name} ({selectedMessage?.email})
             </p>
             <h3 className="text-lg font-semibold  my-2">Subject: {selectedMessage?.subject}</h3>
-            <p className='pb-2'> message:</p>
+            <p className="pb-2"> message:</p>
             <p className="border-t pt-2 text-xl">{selectedMessage?.message}</p>
           </div>
         </div>

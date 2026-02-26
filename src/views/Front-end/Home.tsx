@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 // import BlogCard from "../../components/BlogCard";
 import Pagination from '../../components/frontend/Pagination';
 import { apiService } from '../../Api/Axios';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Button } from 'flowbite-react';
 
 const Home: React.FC = () => {

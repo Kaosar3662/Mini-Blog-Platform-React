@@ -1,16 +1,16 @@
 import { FC } from 'react';
-import { Outlet } from 'react-router';
+import { Outlet } from 'react-router-dom';
 
 import Sidebar from './sidebar/Sidebar';
 import Header from './header/Header';
 import Topbar from './header/Topbar';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 const FullLayout: FC = () => {
   const token = localStorage.getItem('auth');
   const navigate = useNavigate();
   if (!token) {
-    navigate(`/`)
+    navigate(`/`);
   }
   return (
     <>

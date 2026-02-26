@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card } from 'flowbite-react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { HiMailOpen } from 'react-icons/hi';
 
 const ThanksForRegister: React.FC = () => {

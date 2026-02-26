@@ -1,5 +1,4 @@
-
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const Logo = () => {
   return (
@@ -7,6 +6,6 @@ const Logo = () => {
       <h1 className="text-primary">Mini-Blog</h1>
     </Link>
   );
-}
+};
 
-export default Logo
+export default Logo;

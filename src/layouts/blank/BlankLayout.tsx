@@ -1,9 +1,9 @@
-import { Outlet } from "react-router";
-import Navigation from "src/components/frontend/Navigation";
+import { Outlet } from 'react-router-dom';
+import Navigation from 'src/components/frontend/Navigation';
 
 const BlankLayout = () => (
   <>
-    <Navigation/>
+    <Navigation />
     <Outlet />
   </>
 );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, TextInput, Textarea, Label } from 'flowbite-react';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import { apiService, useUI } from '../../Api/Axios';
 
 interface Errors {

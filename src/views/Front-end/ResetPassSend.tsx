@@ -1,5 +1,5 @@
 import { Button, Card, Label, TextInput } from 'flowbite-react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { HiOutlineMail } from 'react-icons/hi';
 import React, { useState } from 'react';
 import { apiService, useUI } from '../../Api/Axios';

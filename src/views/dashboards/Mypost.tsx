@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from 'flowbite-react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { apiService, useUI } from '../../Api/Axios';
 import Pagination from '../../components/frontend/Pagination';
 import Search from '../../components/frontend/Search';

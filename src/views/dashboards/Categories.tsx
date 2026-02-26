@@ -151,7 +151,7 @@ const Categories = () => {
         <Button onClick={openCreateModal}>Create a New Category</Button>
       </div>
 
-      <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+      <table className="min-w-full border border-gray-200 rounded-lg overflow-x-auto shadow-sm">
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-3 text-left text-sm font-semibold">Category Name</th>

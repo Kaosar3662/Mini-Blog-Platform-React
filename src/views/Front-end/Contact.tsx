@@ -1,7 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import { TextInput, Textarea, Button } from 'flowbite-react';
 import { apiService, useUI } from '../../Api/Axios';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 interface ContactForm {
   name: string;

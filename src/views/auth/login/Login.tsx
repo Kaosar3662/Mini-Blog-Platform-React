@@ -1,11 +1,8 @@
-
 import FullLogo from 'src/layouts/full/shared/logo/FullLogo';
 import AuthLogin from '../authforms/AuthLogin';
-import { Link } from 'react-router';
-
+import { Link } from 'react-router-dom';
 
 const Login = () => {
- 
   return (
     <div className="flex justify-center items-center relative overflow-hidden min-h-[calc(100vh-64px)] pt-20">
       <div className="flex h-full justify-center items-center px-4">

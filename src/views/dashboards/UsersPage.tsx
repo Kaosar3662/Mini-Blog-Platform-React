@@ -82,7 +82,7 @@ const UsersPage: React.FC = () => {
       setErrors,
     );
 
-    if (success) {
+    if (success.success === true) {
       setModalOpen(false);
       fetchUsers();
     }
@@ -138,7 +138,7 @@ const UsersPage: React.FC = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-md overflow-x-auto">
         <table className="min-w-full">
           <thead className="bg-gray-50">
             <tr>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
-import { Link } from 'react-router';
-import { Button } from "flowbite-react";
+import { Link } from 'react-router-dom';
+import { Button } from 'flowbite-react';
 
 type NavLinkItem = {
   name: string;
@@ -16,9 +16,7 @@ const Navigation: React.FC = () => {
   const token = localStorage.getItem('auth');
 
   const links: NavLinkItem[] = token
-    ? [
-        { name: 'Dashboard', path: '/dashboard' },
-      ]
+    ? [{ name: 'Dashboard', path: '/dashboard' }]
     : [
         { name: 'Register', path: 'auth/register' },
         { name: 'Login', path: 'auth/login' },
@@ -50,17 +48,14 @@ const Navigation: React.FC = () => {
             <div className="hidden md:flex space-x-4">
               {links.map((link) => (
                 <Link to={link.path} onClick={() => handleLinkClick(link)}>
-                  <Button className=''>{link.name}</Button>
+                  <Button className="">{link.name}</Button>
                 </Link>
               ))}
             </div>
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
-              <button
-                onClick={toggleMenu}
-                className=" focus:outline-none p-2 rounded"
-              >
+              <button onClick={toggleMenu} className=" focus:outline-none p-2 rounded">
                 {menuOpen ? (
                   <FiX className="w-6 h-6 fill-black text-black" />
                 ) : (
@@ -76,7 +71,7 @@ const Navigation: React.FC = () => {
           <div className="md:hidden bg-white px-2 pt-2 pb-4 space-y-1 shadow-md">
             {links.map((link) => (
               <Link to={link.path} onClick={() => handleLinkClick(link)}>
-                <Button className='mb-2'>{link.name}</Button>
+                <Button className="mb-2">{link.name}</Button>
               </Link>
             ))}
           </div>

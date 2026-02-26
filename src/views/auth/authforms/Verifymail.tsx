@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, TextInput, Label } from 'flowbite-react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { apiService, useUI } from '../../../Api/Axios';
 
 interface Errors {
@@ -34,7 +34,6 @@ const VerifyEmail: React.FC = () => {
     if (!token) return;
 
     const verifyEmail = async () => {
-;
       setErrors({});
       setAlert(null);
       const response = await apiService.request(

@@ -2,7 +2,7 @@ import React from 'react';
 import { ChildItem } from '../Sidebaritems';
 import { SidebarItem } from 'flowbite-react';
 import { Icon } from '@iconify/react';
-import { Link, useLocation } from 'react-router';
+import { Link, useLocation } from 'react-router-dom';
 
 interface NavItemsProps {
   item: ChildItem;
