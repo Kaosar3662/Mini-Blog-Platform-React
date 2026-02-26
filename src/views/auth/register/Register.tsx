@@ -1,8 +1,17 @@
 import FullLogo from 'src/layouts/full/shared/logo/FullLogo';
 import AuthRegister from '../authforms/AuthRegister';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { isLoggedIn } from '../Middleware/Authmiddleware';
+import { useEffect } from 'react';
 
 const Register = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isLoggedIn()) {
+      navigate('/dashboard');
+    }
+  }, []);
+
   return (
     <div className="flex justify-center items-center overflow-hidden min-h-[calc(100vh-64px)] pt-20">
       <div className="flex h-full justify-center items-center px-4">

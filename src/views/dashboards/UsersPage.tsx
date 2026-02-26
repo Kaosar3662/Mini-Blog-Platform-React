@@ -32,6 +32,13 @@ const UsersPage: React.FC = () => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [modalOpen, setModalOpen] = useState(false);
   const [editUser, setEditUser] = useState<User | null>(null);
+  const [isCreateModerator, setIsCreateModerator] = useState(false);
+  const [newModerator, setNewModerator] = useState({
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+  });
 
   const limit = 10;
 
@@ -64,7 +71,21 @@ const UsersPage: React.FC = () => {
   };
 
   const openEditModal = (user: User) => {
+    setIsCreateModerator(false);
     setEditUser(user);
+    setModalOpen(true);
+  };
+
+  const openCreateModeratorModal = () => {
+    setEditUser(null);
+    setIsCreateModerator(true);
+    setNewModerator({
+      name: '',
+      email: '',
+      password: '',
+      password_confirmation: '',
+    });
+    setErrors({});
     setModalOpen(true);
   };
 
@@ -88,6 +109,26 @@ const UsersPage: React.FC = () => {
     }
   };
 
+  const handleCreateModerator = async () => {
+    setErrors({});
+    setAlert(null);
+
+    const res: any = await apiService.request(
+      'post',
+      'admin/create-moderator',
+      newModerator,
+      {},
+      setLoader,
+      setAlert,
+      setErrors,
+    );
+
+    if (res?.success === true) {
+      setModalOpen(false);
+      fetchUsers();
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
   }, [currentPage, searchTerm, roleFilter, statusFilter]);
@@ -95,7 +136,7 @@ const UsersPage: React.FC = () => {
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="flex flex-col space-y-6 p-6">
+    <div className="flex flex-col space-y-6 py-6">
       {/* Header */}
       <div className="flex justify-between items-center flex-wrap gap-4">
         <h2 className="text-2xl font-semibold">Users</h2>
@@ -134,6 +175,10 @@ const UsersPage: React.FC = () => {
             <option value="active">Active </option>
             <option value="inactive">Inactive</option>
           </Select>
+
+          <Button onClick={openCreateModeratorModal}>
+            Create Moderator
+          </Button>
         </div>
       </div>
 
@@ -190,11 +235,13 @@ const UsersPage: React.FC = () => {
         )}
       </div>
 
-      {modalOpen && editUser && (
+      {modalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white flex flex-col rounded-2xl shadow-md px-6 py-6 w-full max-w-md">
             <div className="flex justify-between items-start mb-4">
-              <h3 className="text-lg font-semibold mb-4">Edit User</h3>
+              <h3 className="text-lg font-semibold">
+                {isCreateModerator ? 'Create Moderator' : 'Edit User'}
+              </h3>
               <button
                 onClick={() => setModalOpen(false)}
                 className="text-xl font-bold cursor-pointer"
@@ -204,39 +251,112 @@ const UsersPage: React.FC = () => {
             </div>
 
             <div className="space-y-4">
-              <TextInput
-                value={editUser.name}
-                onChange={(e) => setEditUser({ ...editUser, name: e.target.value })}
-              />
-              {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
-              <TextInput
-                value={editUser.email}
-                onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
-              />
-              {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
+              {isCreateModerator ? (
+                <>
+                  <TextInput
+                    placeholder="Name"
+                    value={newModerator.name}
+                    onChange={(e) =>
+                      setNewModerator({ ...newModerator, name: e.target.value })
+                    }
+                  />
+                  {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
 
-              <Select
-                value={editUser.role}
-                onChange={(e) => setEditUser({ ...editUser, role: e.target.value as any })}
-              >
-                <option value="moderator">Moderator</option>
-                <option value="blogger">Blogger</option>
-              </Select>
-              {errors.role && <p className="text-red-600 text-sm mt-1">{errors.role}</p>}
+                  <TextInput
+                    placeholder="Email"
+                    value={newModerator.email}
+                    onChange={(e) =>
+                      setNewModerator({ ...newModerator, email: e.target.value })
+                    }
+                  />
+                  {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
 
-              <Select
-                value={editUser.status}
-                onChange={(e) => setEditUser({ ...editUser, status: e.target.value as any })}
-              >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-                <option value="pending">Pending</option>
-              </Select>
-              {errors.status && <p className="text-red-600 text-sm mt-1">{errors.status}</p>}
+                  <TextInput
+                    type="password"
+                    placeholder="Password"
+                    value={newModerator.password}
+                    onChange={(e) =>
+                      setNewModerator({ ...newModerator, password: e.target.value })
+                    }
+                  />
+                  {errors.password && (
+                    <p className="text-red-600 text-sm mt-1">{errors.password}</p>
+                  )}
 
-              <div className="flex justify-start gap-2">
-                <Button onClick={handleUpdate}>Save</Button>
-              </div>
+                  <TextInput
+                    type="password"
+                    placeholder="Confirm Password"
+                    value={newModerator.password_confirmation}
+                    onChange={(e) =>
+                      setNewModerator({
+                        ...newModerator,
+                        password_confirmation: e.target.value,
+                      })
+                    }
+                  />
+                  {errors.password && (
+                    <p className="text-red-600 text-sm mt-1">
+                      {errors.password}
+                    </p>
+                  )}
+
+                  <Button onClick={handleCreateModerator}>
+                    Create Moderator
+                  </Button>
+                </>
+              ) : (
+                editUser && (
+                  <>
+                    <TextInput
+                      value={editUser.name}
+                      onChange={(e) =>
+                        setEditUser({ ...editUser, name: e.target.value })
+                      }
+                    />
+                    {errors.name && (
+                      <p className="text-red-600 text-sm mt-1">{errors.name}</p>
+                    )}
+
+                    <TextInput
+                      value={editUser.email}
+                      onChange={(e) =>
+                        setEditUser({ ...editUser, email: e.target.value })
+                      }
+                    />
+                    {errors.email && (
+                      <p className="text-red-600 text-sm mt-1">{errors.email}</p>
+                    )}
+
+                    <Select
+                      value={editUser.role}
+                      onChange={(e) =>
+                        setEditUser({ ...editUser, role: e.target.value as any })
+                      }
+                    >
+                      <option value="moderator">Moderator</option>
+                      <option value="blogger">Blogger</option>
+                    </Select>
+                    {errors.role && (
+                      <p className="text-red-600 text-sm mt-1">{errors.role}</p>
+                    )}
+
+                    <Select
+                      value={editUser.status}
+                      onChange={(e) =>
+                        setEditUser({ ...editUser, status: e.target.value as any })
+                      }
+                    >
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </Select>
+                    {errors.status && (
+                      <p className="text-red-600 text-sm mt-1">{errors.status}</p>
+                    )}
+
+                    <Button onClick={handleUpdate}>Save</Button>
+                  </>
+                )
+              )}
             </div>
           </div>
         </div>
