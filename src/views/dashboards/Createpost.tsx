@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextInput, Textarea, Label } from 'flowbite-react';
+import { Button, TextInput, Label } from 'flowbite-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { apiService, useUI } from '../../Api/Axios';
 import { HiTrash } from 'react-icons/hi';
+import LexicalEditor from '../../components/Lexical/Lexical';
 
 interface Errors {
   title?: string;
@@ -29,6 +30,7 @@ const CreateBlog: React.FC = () => {
   const [categories, setCategories] = useState<any[]>([]);
 
   const [errors, setErrors] = useState<Errors>({});
+  const [editorUpdateTrigger, setEditorUpdateTrigger] = useState(0);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -52,7 +54,9 @@ const CreateBlog: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!slug) return;
+    if (!slug) {
+      return; 
+    }
 
     const fetchPost = async () => {
       setErrors({});
@@ -76,6 +80,7 @@ const CreateBlog: React.FC = () => {
           content: post.content,
           category_id: String(post.category_id),
         }));
+        setEditorUpdateTrigger((prev) => prev + 1);
       }
     };
 
@@ -149,24 +154,27 @@ const CreateBlog: React.FC = () => {
 
           <div>
             <Label htmlFor="short_desc">Short Description</Label>
-            <Textarea
+            <textarea
               id="short_desc"
               placeholder="Quick summary of your blog"
               value={formData.short_desc}
               onChange={handleChange}
               rows={3}
+              className="w-full rounded-2xl border border-gray-300 bg-gray-100 p-3 focus:border-primary focus:ring-primary"
             />
             {errors.short_desc && <p className="mt-1 text-xs text-red-600">{errors.short_desc}</p>}
           </div>
 
           <div>
             <Label htmlFor="content">Content</Label>
-            <Textarea
-              id="content"
-              placeholder="Full content of the blog post..."
+            <LexicalEditor
               value={formData.content}
-              onChange={handleChange}
-              rows={6}
+              onChange={(content: string) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  content,
+                }))
+              }
             />
             {errors.content && <p className="mt-1 text-xs text-red-600">{errors.content}</p>}
           </div>
@@ -197,7 +205,7 @@ const CreateBlog: React.FC = () => {
             )}
           </div>
 
-          <div className='relative'>
+          <div className="relative">
             <Label htmlFor="cover_image">Cover Image</Label>
             {formData.cover_image && (
               <Button

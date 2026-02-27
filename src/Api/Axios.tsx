@@ -88,7 +88,6 @@ export const apiService = {
     setAlert?: (value: { message: string; type: 'success' | 'error' } | null) => void,
     setErrors?: (errors: Record<string, string>) => void,
     showSuccessAlert?: boolean,
-    p0?: boolean,
   ): Promise<T | { errors?: any; success?: boolean; data?: any }> => {
     if (setLoader) setLoader(true);
     try {
@@ -125,7 +124,11 @@ export const apiService = {
           }
         }
         if (setAlert && !res.success) {
-          setAlert({ message: res.message, type: 'error' });
+          if (res.message == 'Please verify your email first') {
+            return res;
+          } else {
+            setAlert({ message: res.message, type: 'error' });
+          }
         }
 
         return res;

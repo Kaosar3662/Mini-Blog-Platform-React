@@ -16,7 +16,9 @@ const Profile = () => {
   };
 
   const fetchUser = async () => {
-    const response = await apiService.request('get', `user`, {}, {}, setLoader, setAlert);
+    const auth = localStorage.getItem('auth');
+    if (!auth) return;
+    const response = await apiService.request('get', `user`, {}, {}, undefined, setAlert);
     setName(response.name);
     setMail(response.email);
   };

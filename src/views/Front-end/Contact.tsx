@@ -51,7 +51,6 @@ const Contact: React.FC = () => {
     );
 
     if (response.success === true) {
-      debugger;
       setForm({
         name: '',
         email: '',

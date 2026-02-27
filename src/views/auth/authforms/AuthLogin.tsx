@@ -50,7 +50,12 @@ const AuthLogin: React.FC = () => {
       setErrors,
       true,
     );
-
+    if (response.message == 'Please verify your email first') {
+      const userData = formData;
+      navigate('/thanksforregistering', {
+        state: { ...userData, from: 'login' },
+      });
+    }
     if (response?.success && response?.data?.token) {
       localStorage.setItem(
         'auth',
@@ -59,10 +64,16 @@ const AuthLogin: React.FC = () => {
           role: response.data.role,
         }),
       );
-
+      debugger;
+      setFormData({
+        email: '',
+        password: '',
+      });
+      setLoader(true);
       setTimeout(() => {
+        setLoader(false);
         navigate('/dashboard');
-      }, 2000);
+      }, 1000);
     }
   };
 
@@ -95,10 +106,8 @@ const AuthLogin: React.FC = () => {
       setErrors,
     );
 
-    if (res.success == true) {
-      setTimeout(() => {
-        navigate('/resetpasssent');
-      }, 2000);
+    if (res.success) {
+      navigate('/resetpasssent', { state: resendEmail });
     }
   };
 

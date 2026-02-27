@@ -43,7 +43,10 @@ const AuthRegister: React.FC = () => {
     );
 
     if (response.success === true) {
-      navigate('/thanksforregistering');
+      const userData = formData;
+      navigate('/thanksforregistering', {
+        state: { ...userData, from: 'register' },
+      });
     }
   };
 

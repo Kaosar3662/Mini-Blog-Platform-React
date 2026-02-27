@@ -1,52 +1,31 @@
-import { Button, Card, Label, TextInput } from 'flowbite-react';
-import { useNavigate } from 'react-router-dom';
+import { Button, Card} from 'flowbite-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { HiOutlineMail } from 'react-icons/hi';
-import React, { useState } from 'react';
+import React from 'react';
 import { apiService, useUI } from '../../Api/Axios';
-
-type FormErrors = {
-  email?: string;
-  password?: string;
-  general?: string;
-};
 
 const ResetPasswordSent: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const email = location.state as string;
   const { setAlert, setLoader } = useUI();
-  const [resendModalOpen, setResendModalOpen] = useState<boolean>(false);
-  const [resendEmail, setResendEmail] = useState<string>('');
-  const [errors, setErrors] = useState<FormErrors>({});
 
-  const openResendModal = () => {
-    setResendModalOpen(true);
-  };
+const handleForgotSubmit = async () => {
+  setAlert(null);
 
-  const closeResendModal = () => {
-    setResendModalOpen(false);
-    setResendEmail('');
-  };
-
-  const handleForgotSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setErrors({});
-    setAlert(null);
-    await apiService.request(
-      'post',
-      'auth/password/forgot',
-      { email: resendEmail },
-      {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      },
-      setLoader,
-      setAlert,
-      setErrors,
-    );
-
-    closeResendModal();
-  };
+  await apiService.request(
+    'post',
+    'auth/password/forgot',
+    { email },
+    {
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    },
+    setLoader,
+    setAlert,
+    undefined,
+    true
+  );
+};
 
   return (
     <div className="flex flex-col items-center justify-center pt-20 px-4 min-h-[calc(100vh-64px)]">
@@ -69,47 +48,12 @@ const ResetPasswordSent: React.FC = () => {
             Return to Login
           </Button>
 
-          <button onClick={openResendModal} className="text-sm text-gray-500 hover:underline">
+          <button onClick={handleForgotSubmit} className="text-sm text-gray-500 hover:underline">
             Didn't receive the email? Click to resend
           </button>
         </div>
       </Card>
-      {resendModalOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
-          onClick={closeResendModal}
-        >
-          <div
-            className="relative bg-white w-full max-w-md mx-4 rounded-2xl shadow-md p-6 transition-all duration-200"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold text-gray-800">Forgot Password</h2>
-              <button onClick={closeResendModal} className="text-gray-500 hover:text-black">
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleForgotSubmit}>
-              <div className="mb-4">
-                <Label htmlFor="resendEmail">Email</Label>
-                <TextInput
-                  id="resendEmail"
-                  type="email"
-                  required
-                  value={resendEmail}
-                  onChange={(e) => setResendEmail(e.target.value)}
-                />
-                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-              </div>
-
-              <Button type="submit" className="w-full bg-primary text-white shadow-md">
-                Send Reset Link
-              </Button>
-            </form>
-          </div>
-        </div>
-      )}
+      
     </div>
   );
 };

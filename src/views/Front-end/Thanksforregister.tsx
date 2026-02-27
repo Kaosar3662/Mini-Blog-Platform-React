@@ -1,10 +1,33 @@
-import React from 'react';
-import { Button, Card } from 'flowbite-react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Button, Card, TextInput, Label } from 'flowbite-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { HiMailOpen } from 'react-icons/hi';
+import { apiService, useUI } from '../../Api/Axios';
 
 const ThanksForRegister: React.FC = () => {
-  const navigate = useNavigate();
+  const { setLoader, setAlert } = useUI();
+  const location = useLocation();
+  const userData = location.state || {};
+  const from = userData.from;
+  console.log(userData)
+
+
+  const handleResendSubmit = async () => {
+
+    const email = userData.email;
+
+    setAlert(null);
+    const response = await apiService.request(
+      'post',
+      'auth/email/resend',
+      { email } ,
+      {},
+      setLoader,
+      setAlert,
+      undefined,
+      true
+    );
+  };
 
   return (
     <div className="flex flex-col items-center justify-center pt-20 px-4 min-h-[calc(100vh-64px)]">
@@ -15,18 +38,18 @@ const ThanksForRegister: React.FC = () => {
           </div>
         </div>
 
-        <h2 className="mb-3 text-3xl text-primary font-semiboldtext-primary">
-          Registration Successful!
+        <h2 className="mb-3 text-3xl text-primary font-semibold">
+          {from === 'login' ? 'Verify Your Email' : 'Registration Successful!'}
         </h2>
 
         <p className="mb-6 text-gray-700 text-base">
-          Thank you for joining us. A confirmation email has been sent to your inbox. Please{' '}
-          <span className="font-bold">verify your email</span> to activate your account. You can
-          also try logging in now.
+          {from === 'login'
+            ? 'You need to verify your email before you can log in. Please check your inbox and verify your account.'
+            : 'Thank you for joining us. A confirmation email has been sent to your inbox. Please verify your email to activate your account.'}
         </p>
-
-        <Button color="primary" onClick={() => navigate('/auth/login')} className="w-full">
-          Go to Login
+        <p>If you didn't recieve the mail, Click The Button Below</p>
+        <Button color="primary" onClick={handleResendSubmit} className="w-full">
+          Resend The mail
         </Button>
       </Card>
     </div>
