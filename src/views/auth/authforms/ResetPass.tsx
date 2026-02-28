@@ -61,9 +61,9 @@ const ResetPass: React.FC = () => {
       setLoader,
       setAlert,
       setErrors,
-      true
+      true,
     );
-    
+
     setLoader(true);
     if (response?.success) {
       setTimeout(() => {
@@ -78,9 +78,9 @@ const ResetPass: React.FC = () => {
   };
 
   return (
-    <div className="relative overflow-hidden pt-20 flex min-h-[calc(100vh-64px)] justify-center items-center px-4">
+    <div className="relative overflow-hidden pt-20 flex min-h-[calc(100vh-88px)] justify-center items-center px-4">
       <div className="rounded-xl dark:shadow-dark-md shadow-md bg-white dark:bg-darkgray p-6 relative wrap-break-word md:w-105 w-full border-none">
-          <h6 className='flex justify-center text-xl pb-4 text-primary'>Make A New Password</h6>
+        <h6 className="flex justify-center text-xl pb-4 text-primary">Make A New Password</h6>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md mx-auto p-4">
           <div>
             <TextInput

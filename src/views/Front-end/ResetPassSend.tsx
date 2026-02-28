@@ -1,4 +1,4 @@
-import { Button, Card} from 'flowbite-react';
+import { Button, Card } from 'flowbite-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { HiOutlineMail } from 'react-icons/hi';
 import React from 'react';
@@ -10,25 +10,25 @@ const ResetPasswordSent: React.FC = () => {
   const email = location.state as string;
   const { setAlert, setLoader } = useUI();
 
-const handleForgotSubmit = async () => {
-  setAlert(null);
+  const handleForgotSubmit = async () => {
+    setAlert(null);
 
-  await apiService.request(
-    'post',
-    'auth/password/forgot',
-    { email },
-    {
-      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-    },
-    setLoader,
-    setAlert,
-    undefined,
-    true
-  );
-};
+    await apiService.request(
+      'post',
+      'auth/password/forgot',
+      { email },
+      {
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      },
+      setLoader,
+      setAlert,
+      undefined,
+      true,
+    );
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center pt-20 px-4 min-h-[calc(100vh-64px)]">
+    <div className="flex flex-col items-center justify-center pt-20 px-4 min-h-[calc(100vh-88px)]">
       <Card className="max-w-lg w-full text-center p-8 bg-white shadow-md rounded-xl">
         <div className="flex justify-center mb-6">
           <div className="bg-primary-100 p-5 rounded-full shadow-lg">
@@ -53,7 +53,6 @@ const handleForgotSubmit = async () => {
           </button>
         </div>
       </Card>
-      
     </div>
   );
 };

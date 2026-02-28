@@ -13,6 +13,7 @@ const Dashboard = Loadable(lazy(() => import('../views/dashboards/Dashboard')));
 const Categories = Loadable(lazy(() => import('../views/dashboards/Categories')));
 const Createblog = Loadable(lazy(() => import('../views/dashboards/Createpost')));
 const ContactMessage = Loadable(lazy(() => import('../views/dashboards/Contactmesssage')));
+const AllPost = Loadable(lazy(() => import('../views/dashboards/Allpost')));   
 const Myposts = Loadable(lazy(() => import('../views/dashboards/Mypost')));
 const Users = Loadable(lazy(() => import('../views/dashboards/UsersPage')));
 
@@ -25,6 +26,8 @@ const Error = Loadable(lazy(() => import('../views/auth/error/Error')));
 
 const Home = Loadable(lazy(() => import('../views/Front-end/Home')));
 const Contact = Loadable(lazy(() => import('../views/Front-end/Contact')));
+const Posts = Loadable(lazy(() => import('../views/Front-end/AllPosts')));
+const PostDetails = Loadable(lazy(() => import('../views/Front-end/Postdetails')));
 const Thanks = Loadable(lazy(() => import('../views/Front-end/Thanksforregister')));
 const Resetsent = Loadable(lazy(() => import('../views/Front-end/ResetPassSend')));
 
@@ -33,6 +36,7 @@ const adminRoutes = [{ path: '/users', element: <Users /> }];
 const moderatorRoutes = [
   { path: '/categories', element: <Categories /> },
   { path: '/cmessage', element: <ContactMessage /> },
+  { path: '/allposts', element: <AllPost /> },
 ];
 
 const bloggerRoutes = [
@@ -75,6 +79,8 @@ const Router = [
     element: <BlankLayout />,
     children: [
       { path: '/', exact: true, element: <Home /> },
+      { path: '/postdetails/:slug', element: <PostDetails /> },
+      { path: '/posts', element: <Posts /> },
       { path: '/auth/login', element: <Login /> },
       { path: '/auth/register', element: <Register /> },
       { path: '/thanksforregistering', element: <Thanks /> },

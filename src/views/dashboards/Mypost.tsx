@@ -26,22 +26,10 @@ const Mypost: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [meta, setMeta] = useState<Meta>({ total: 0 });
   const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const limit = 10;
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-      setCurrentPage(1);
-    }, 500);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchTerm]);
+  const limit = 2;
 
   useEffect(() => {
     setCurrentPage(1);
@@ -67,8 +55,8 @@ const Mypost: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchPosts(currentPage, debouncedSearchTerm, statusFilter);
-  }, [currentPage, debouncedSearchTerm, statusFilter]);
+    fetchPosts(currentPage, searchTerm, statusFilter);
+  }, [currentPage, searchTerm, statusFilter]);
 
   const handleDelete = async (slug: string) => {
     if (!window.confirm('Are you sure you want to delete this post?')) return;
@@ -84,12 +72,15 @@ const Mypost: React.FC = () => {
     );
 
     if (res?.success) {
-      fetchPosts(currentPage, debouncedSearchTerm, statusFilter);
+      fetchPosts(currentPage, searchTerm, statusFilter);
     }
   };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+  const handleView = (slug: string) => {
+    navigate(`/Postdetails/${slug}`);
   };
 
   const totalPages = Math.ceil(meta.total / limit);
@@ -148,7 +139,19 @@ const Mypost: React.FC = () => {
                     />
                   </td>
                   <td className="px-6 py-4 capitalize">{post.category.name}</td>
-                  <td className="px-6 py-4 capitalize">{post.status}</td>
+                  <td className="px-6 py-4 capitalize">
+                    <span
+                      className={
+                        post.status === 'approved'
+                          ? 'text-green-600 font-semibold'
+                          : post.status === 'rejected'
+                            ? 'text-red-600 font-semibold'
+                            : 'text-yellow-600 font-semibold'
+                      }
+                    >
+                      {post.status.charAt(0).toUpperCase() + post.status.slice(1)}
+                    </span>
+                  </td>
                   <td className="px-6 py-4 flex gap-2">
                     <Button
                       size="sm"
@@ -159,6 +162,9 @@ const Mypost: React.FC = () => {
                     </Button>
                     <Button size="sm" color="red" onClick={() => handleDelete(post.slug)}>
                       Delete
+                    </Button>
+                    <Button color="info" size="xs" onClick={() => handleView(post.slug)}>
+                      Preview
                     </Button>
                   </td>
                 </tr>

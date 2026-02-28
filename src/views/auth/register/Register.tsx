@@ -13,7 +13,7 @@ const Register = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center overflow-hidden min-h-[calc(100vh-64px)] pt-20">
+    <div className="flex justify-center items-center overflow-hidden min-h-[calc(100vh-88px)] pt-20">
       <div className="flex h-full justify-center items-center px-4">
         <div className="rounded-xl dark:shadow-dark-md shadow-md bg-white dark:bg-darkgray p-6 relative wrap-break-word md:w-105 w-full border-none">
           <div className="flex h-full flex-col justify-center gap-2 p-0 w-full">

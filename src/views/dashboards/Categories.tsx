@@ -28,7 +28,7 @@ const Categories = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState<number>(0);
-  const limit = 10;
+  const limit = 2;
 
   const fetchCategories = async () => {
     setLoader(true);

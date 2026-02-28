@@ -11,7 +11,6 @@ const VerifyEmail: React.FC = () => {
   const [token, setToken] = useState('');
   const [linkExpired, setLinkExpired] = useState(false);
 
-
   useEffect(() => {
     const tokenFromUrl = searchParams.get('token');
 
@@ -21,7 +20,6 @@ const VerifyEmail: React.FC = () => {
       setLinkExpired(true);
     }
   }, [searchParams]);
-
 
   useEffect(() => {
     if (!token) return;
@@ -68,7 +66,7 @@ const VerifyEmail: React.FC = () => {
   };
 
   return (
-    <div className="relative overflow-hidden pt-20 flex min-h-[calc(100vh-64px)] justify-center items-center px-4">
+    <div className="relative overflow-hidden pt-20 flex [calc(100vh-88min-h-px)] justify-center items-center px-4">
       {linkExpired && (
         <div className="bg-white rounded-2xl shadow-md p-8 max-w-md w-full mx-4 text-center">
           <h2 className="text-xl font-semibold text-gray-800 mb-3">Token Expired</h2>

@@ -12,7 +12,7 @@ const Login = () => {
     }
   }, []);
   return (
-    <div className="flex justify-center items-center relative overflow-hidden min-h-[calc(100vh-64px)] pt-20">
+    <div className="flex justify-center items-center relative overflow-hidden min-h-[calc(100vh-88px)] pt-20">
       <div className="flex h-full justify-center items-center px-4">
         <div className="rounded-xl shadow-md bg-white dark:bg-darkgray p-6 w-full md:w-105 border-none">
           <div className="flex flex-col gap-2 p-0 w-full">

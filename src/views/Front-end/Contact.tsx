@@ -66,16 +66,16 @@ const Contact: React.FC = () => {
     <>
       {isSuccess ? (
         <div className="fixed inset-0 flex items-center justify-center bg-[#EEF3F8] z-10">
-          <div className="bg-white rounded-2xl shadow-md px-8 py-10 text-center max-w-md w-full">
-            <h1 className="text-3xl font-semibold mb-6">Thank You ☺️</h1>
+          <div className="flex flex-col items-center bg-white rounded-2xl shadow-md px-8 py-10 text-center max-w-md w-full">
+            <h1 className="text-3xl font-semibold mb-6 ">Thank You ☺️</h1>
             <p>We will reach you back soon</p>
-            <Button onClick={() => navigate(`/}`)} className="mt-6 w-full rounded-2xl">
+            <Button onClick={() => navigate(`/`)} className="mt-6 rounded-4xl">
               Go Home
             </Button>
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center pt-20 px-4 min-h-[calc(100vh-64px)]">
+        <div className="flex flex-col items-center justify-center pt-20 px-4 min-h-[calc(100vh-88px)]">
           <div className="max-w-2xl w-full mx-auto bg-white rounded-2xl shadow-md px-6 py-8">
             <h1 className="text-3xl font-semibold mb-6">Contact Us</h1>
             <form onSubmit={handleSubmit} className="space-y-6">

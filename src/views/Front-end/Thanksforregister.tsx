@@ -9,28 +9,26 @@ const ThanksForRegister: React.FC = () => {
   const location = useLocation();
   const userData = location.state || {};
   const from = userData.from;
-  console.log(userData)
-
+  console.log(userData);
 
   const handleResendSubmit = async () => {
-
     const email = userData.email;
 
     setAlert(null);
     const response = await apiService.request(
       'post',
       'auth/email/resend',
-      { email } ,
+      { email },
       {},
       setLoader,
       setAlert,
       undefined,
-      true
+      true,
     );
   };
 
   return (
-    <div className="flex flex-col items-center justify-center pt-20 px-4 min-h-[calc(100vh-64px)]">
+    <div className="flex flex-col items-center justify-center pt-20 px-4 min-h-[calc(100vh-88px)]">
       <Card className="max-w-lg w-full text-center p-8 bg-white shadow-md rounded-xl">
         <div className="flex justify-center mb-6">
           <div className="bg-primary-100 p-5 rounded-full shadow-lg">

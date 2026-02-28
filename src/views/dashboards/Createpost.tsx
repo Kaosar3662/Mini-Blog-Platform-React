@@ -24,7 +24,7 @@ const CreateBlog: React.FC = () => {
     short_desc: '',
     content: '',
     category_id: '',
-    cover_image: null as File | null,
+    cover_image: null as File | string | null,
   });
 
   const [categories, setCategories] = useState<any[]>([]);
@@ -79,6 +79,7 @@ const CreateBlog: React.FC = () => {
           short_desc: post.short_desc,
           content: post.content,
           category_id: String(post.category_id),
+          cover_image: post.cover_image ? post.cover_image : null,
         }));
         setEditorUpdateTrigger((prev) => prev + 1);
       }
@@ -112,7 +113,7 @@ const CreateBlog: React.FC = () => {
     data.append('short_desc', formData.short_desc);
     data.append('content', formData.content);
     data.append('category_id', formData.category_id);
-    if (formData.cover_image) {
+    if (formData.cover_image && typeof formData.cover_image !== 'string') {
       data.append('cover_image', formData.cover_image);
     }
     setErrors({});
@@ -128,7 +129,7 @@ const CreateBlog: React.FC = () => {
     );
 
     if (response?.success) {
-      navigate('/dashboard');
+      navigate('/myposts');
     }
   };
 
@@ -239,7 +240,11 @@ const CreateBlog: React.FC = () => {
             {formData.cover_image && (
               <div className=" relative mt-4 flex flex-col items-start gap-3">
                 <img
-                  src={URL.createObjectURL(formData.cover_image)}
+                  src={
+                    typeof formData.cover_image === 'string'
+                      ? `http://127.0.0.1:8000/storage/${formData.cover_image}`
+                      : URL.createObjectURL(formData.cover_image as File)
+                  }
                   alt="Preview"
                   className="w-full max-w-60 rounded-xl shadow-md object-cover"
                 />

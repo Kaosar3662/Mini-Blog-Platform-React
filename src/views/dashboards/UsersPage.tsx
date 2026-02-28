@@ -40,7 +40,7 @@ const UsersPage: React.FC = () => {
     password_confirmation: '',
   });
 
-  const limit = 10;
+  const limit = 2;
 
   const fetchUsers = async () => {
     const offset = (currentPage - 1) * limit;

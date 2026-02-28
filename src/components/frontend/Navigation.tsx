@@ -34,7 +34,7 @@ const Navigation: React.FC = () => {
   return (
     <>
       <nav className="bg-white w-full fixed z-40 shadow-md">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto px-4">
           <div className="flex justify-between h-16 items-center">
             {/* Logo */}
             <div className="shrink-0">

@@ -59,10 +59,10 @@ const Home: React.FC = () => {
   }));
 
   return (
-    <div className="min-h-screen flex flex-col pt-20">
+    <div className="min-h-[calc(100vh-88px)] max-w-4xl px-4 mx-auto flex flex-col pt-20">
       {/*   <Navbar /> */}
 
-      <main className="flex-1 container mx-auto px-4 py-6">
+      <main className="w-full mx-auto">
         {/*   <HeroSection /> 
 
    <div className="my-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">

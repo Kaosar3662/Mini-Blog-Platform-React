@@ -6,7 +6,7 @@ const Topbar = () => {
     <div className="py-3.75 px-6 z-40 sticky top-0 bg-[linear-gradient(90deg,#0f0533_0%,#1b0a5c_100%)]">
       <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
         <div className="md:flex hidden items-center gap-5">
-          <Link target="_black" to="https://www.framer.com">
+          <Link target="_black" to="http://localhost:5173/">
             <h1 className="text-white text-xl">FrontEnd</h1>
           </Link>
           <div className="xl:flex items-center gap-4 pl-5 border-l border-opacity-20 border-white hidden"></div>

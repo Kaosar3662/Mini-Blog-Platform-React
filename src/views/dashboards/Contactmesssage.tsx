@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { TextInput, Select, Button } from 'flowbite-react';
+import { FiTrash } from 'react-icons/fi';
 import { apiService, useUI } from 'src/Api/Axios';
 import Pagination from '../../components/frontend/Pagination';
 import Search from '../../components/frontend/Search';
@@ -22,7 +23,7 @@ const Contactmesssage = () => {
   const [status, setStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(2);
   const { setLoader, setAlert } = useUI();
 
   const fetchMessages = async () => {
@@ -69,6 +70,24 @@ const Contactmesssage = () => {
     fetchMessages();
   };
 
+  const handleDelete = async (e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
+
+    setAlert(null);
+    const res = await apiService.request(
+      'delete',
+      `/admin/messages/${id}`,
+      {},
+      {},
+      setLoader,
+      setAlert,
+    );
+
+    if (res?.success) {
+      fetchMessages();
+    }
+  };
+
   useEffect(() => {
     fetchMessages();
   }, [currentPage, searchTerm, status]);
@@ -102,6 +121,7 @@ const Contactmesssage = () => {
                 <th className="px-6 py-3 text-left text-sm font-semibold">Email</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold">Subject</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold">Date</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -117,6 +137,14 @@ const Contactmesssage = () => {
                   <td className="px-6 py-4">{msg.email}</td>
                   <td className="px-6 py-4">{msg.subject}</td>
                   <td className="px-6 py-4">{new Date(msg.created_at).toLocaleDateString()}</td>
+                  <td className="px-6 py-4">
+                    <button
+                      onClick={(e) => handleDelete(e, msg.id)}
+                      className="text-black hover:text-red-600 cursor-pointer"
+                    >
+                      <FiTrash />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -67,7 +67,7 @@ const SidebarContent: MenuItem[] = [
         name: 'All Blog',
         icon: 'mdi:file-document-multiple-outline',
         id: uniqueId(),
-        url: '/posts',
+        url: '/allposts',
         isPro: false,
       },
       {
