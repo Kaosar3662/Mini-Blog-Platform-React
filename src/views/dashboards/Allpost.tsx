@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FaTimes } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { Button, Select} from 'flowbite-react';
 import Pagination from '../../components/frontend/Pagination';

@@ -40,13 +40,9 @@ const AllPosts = () => {
     const auth = JSON.parse(localStorage.getItem('auth') || '{}');
     const slugParam = '';
 
-    if (auth.role === 'admin' || auth.role === 'moderator') {
-      url = '/admin/posts';
-    } else if (auth.role === 'blogger') {
-      url = '/blogger/posts';
-    } else {
+  
       url = '/posts';
-    }
+    
 
     const offset = (currentPage - 1) * limit;
     const res: any = await apiService.request(

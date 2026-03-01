@@ -13,6 +13,7 @@ const Dashboard = Loadable(lazy(() => import('../views/dashboards/Dashboard')));
 const Categories = Loadable(lazy(() => import('../views/dashboards/Categories')));
 const Createblog = Loadable(lazy(() => import('../views/dashboards/Createpost')));
 const ContactMessage = Loadable(lazy(() => import('../views/dashboards/Contactmesssage')));
+const Comments = Loadable(lazy(() => import('../views/dashboards/Comments')));
 const AllPost = Loadable(lazy(() => import('../views/dashboards/Allpost')));   
 const Myposts = Loadable(lazy(() => import('../views/dashboards/Mypost')));
 const Users = Loadable(lazy(() => import('../views/dashboards/UsersPage')));
@@ -36,6 +37,7 @@ const adminRoutes = [{ path: '/users', element: <Users /> }];
 const moderatorRoutes = [
   { path: '/categories', element: <Categories /> },
   { path: '/cmessage', element: <ContactMessage /> },
+  { path: '/comments', element: <Comments /> },
   { path: '/allposts', element: <AllPost /> },
 ];
 
