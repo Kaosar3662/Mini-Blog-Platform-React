@@ -17,12 +17,13 @@ interface Comment {
   post_title: string;
   post_slug: string;
   parentPost: Post;
+  status: string;
 }
 
 const Comments: React.FC = () => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [limit, setLimit] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(2);
   const [offset, setOffset] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -108,6 +109,12 @@ const Comments: React.FC = () => {
               </th>
               <th
                 scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
+              >
+                Status
+              </th>
+              <th
+                scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500  tracking-wider"
               >
                 Action
@@ -117,7 +124,7 @@ const Comments: React.FC = () => {
           <tbody className="bg-white divide-y divide-gray-200">
             {comments.length === 0 && (
               <tr>
-                <td colSpan={3} className="text-center py-4 text-gray-500">
+                <td colSpan={4} className="text-center py-4 text-gray-500">
                   No comments found.
                 </td>
               </tr>
@@ -139,15 +146,30 @@ const Comments: React.FC = () => {
                     {comment.post_title}
                   </Link>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap space-x-2">
-                  <Button
-                    size="xs"
-                    color="success"
-                    onClick={() => handleApprove(comment.id)}
-                    className="inline-flex items-center px-3 py-1.5 text-xs"
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <span
+                    className={
+                      comment.status === 'approved'
+                        ? 'text-green-600 font-medium'
+                        : comment.status === 'hidden'
+                        ? 'text-yellow-600 font-medium'
+                        : 'text-gray-600 font-medium'
+                    }
                   >
-                    Approve
-                  </Button>
+                    {comment.status}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap space-x-2">
+                  {comment.status !== 'approved' && (
+                    <Button
+                      size="xs"
+                      color="success"
+                      onClick={() => handleApprove(comment.id)}
+                      className="inline-flex items-center px-3 py-1.5 text-xs"
+                    >
+                      Approve
+                    </Button>
+                  )}
                   <Button
                     size="xs"
                     color="warning"

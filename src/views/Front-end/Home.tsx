@@ -1,94 +1,100 @@
-import React, { useState, useEffect } from 'react';
-// import Navbar from "../../components/Navbar";
-// import Footer from "../../components/Footer";
-// import HeroSection from "../../components/HeroSection";
-// import SearchBar from "../../components/SearchBar";
-// import CategoryFilter from "../../components/CategoryFilter";
-// import BlogList from "../../components/BlogList";
-// import BlogCard from "../../components/BlogCard";
-import Pagination from '../../components/frontend/Pagination';
+import React, { useEffect, useState } from 'react';
 import { apiService } from '../../Api/Axios';
 import { Link } from 'react-router-dom';
 import { Button } from 'flowbite-react';
+import BlogCard from 'src/components/frontend/BlogCard';
+
+interface Post {
+  id: number;
+  title: string;
+  excerpt?: string;
+  slug: string;
+}
 
 const Home: React.FC = () => {
-  const [posts, setPosts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const ContentPerPage = 10;
+  const [posts, setPosts] = useState<Post[]>([]);
 
-  const getAuthToken = () => {
-    const auth = localStorage.getItem('auth');
-    if (!auth) return null;
-    const LS = JSON.parse(auth);
-    return LS.token || null;
-  };
-  const authToken = getAuthToken();
   useEffect(() => {
-    let canceled = false;
-
     const fetchPosts = async () => {
-      const offset = (currentPage - 1) * ContentPerPage;
-      //  const data = await apiService({ search: searchTerm });
-      //  if (canceled) return;
-      //  const allPosts = data.data.posts || [];
-      //  const start = (currentPage - 1) * ContentPerPage;
-      //  const end = start + ContentPerPage;
-      //  setPosts(allPosts.slice(start, end));
-      // setTotalPages(Math.ceil(allPosts.length / ContentPerPage) || 1);
-      const allPosts = 500;
-      setTotalPages(Math.ceil(allPosts / ContentPerPage) || 10);
+      const res: any = await apiService.request(
+        'get',
+        '/posts',
+        {},
+        { params: { limit: 9, offset: 0 } }
+      );
+
+      setPosts(res?.data?.data || []);
     };
+
     fetchPosts();
-    return () => {
-      canceled = true;
-    };
-  }, [currentPage]);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  // Dummy data for BlogList
-  const dummyBlogs = Array.from({ length: 6 }, (_, i) => ({
-    id: i + 1,
-    title: `Blog Post ${i + 1}`,
-    excerpt: 'This is a short summary of the blog post.',
-    status: 'Published',
-  }));
+  }, []);
 
   return (
-    <div className="min-h-[calc(100vh-88px)] max-w-4xl px-4 mx-auto flex flex-col pt-20">
-      {/*   <Navbar /> */}
-
-      <main className="w-full mx-auto">
-        {/*   <HeroSection /> 
-
-   <div className="my-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-    <SearchBar />
-   <CategoryFilter />
-  </div>
-
-   <BlogList>
-   {dummyBlogs.map((blog) => (
-<BlogCard key={blog.id} title={blog.title} excerpt={blog.excerpt} status={blog.status} />
-   ))}
-      </BlogList>
-      */}
-
-        <h1 className="text-primary text-[70px] my-10">This is Home</h1>
-
-        <div className="mt-6 ">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
+    <div className="min-h-[calc(100vh-88px)] max-w-4xl px-4 mx-auto flex flex-col pt-23">
+      
+      {/* Hero Section */}
+      <section className="bg-white shadow-md rounded-2xl p-6 mb-12">
+        <div className="relative rounded-2xl overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1492724441997-5dc865305da7"
+            alt="Blog Hero"
+            className="w-full h-[420px] object-cover"
           />
+          <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center px-6">
+            <h1 className="text-5xl font-bold text-white mb-4">
+              Welcome to Our Blog
+            </h1>
+            <p className="text-gray-200 text-lg max-w-2xl">
+              Discover ideas, stories, and insights from our latest posts.
+            </p>
+          </div>
         </div>
-      </main>
+      </section>
 
-      {/*  <Footer /> */}
+      {/* Posts Section */}
+      <section className="bg-white shadow-md rounded-2xl p-8 mb-12">
+        <h2 className="text-2xl font-semibold mb-8">Latest Posts</h2>
+
+        {posts.length === 0 ? (
+          <p className="text-gray-500">No posts available.</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {posts.map((post) => (
+              <Link key={post.id} to={`/postdetails/${post.slug}`}>
+                <BlogCard post={post} />
+              </Link>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-10 text-center">
+          <Link to="/posts">
+            <Button color="primary">View All Posts</Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-white shadow-md rounded-2xl overflow-hidden mb-12">
+        <div className="relative">
+          <img
+            src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4"
+            alt="Contact CTA"
+            className="w-full h-[320px] object-cover"
+          />
+          <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-center px-6">
+            <h2 className="text-3xl font-semibold text-white mb-4">
+              Want to Get in Touch?
+            </h2>
+            <p className="text-gray-200 mb-6 max-w-xl">
+              We would love to hear from you. Reach out through our contact page.
+            </p>
+            <Link to="/contact">
+              <Button color="primary">Contact Us</Button>
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

@@ -86,7 +86,7 @@ const Allpost: React.FC = () => {
   };
 
   const handleView = (slug: string) => {
-    navigate(`/Postdetails/${slug}`);
+    navigate(`/Postdetails/${slug}`, { state: { from: 'admin' } });
   };
 
   const onPageChange = (p: number) => setPage(p);

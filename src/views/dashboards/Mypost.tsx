@@ -80,7 +80,7 @@ const Mypost: React.FC = () => {
     setCurrentPage(page);
   };
   const handleView = (slug: string) => {
-    navigate(`/Postdetails/${slug}`);
+    navigate(`/Postdetails/${slug}`, { state: { from: 'blogger' } });
   };
 
   const totalPages = Math.ceil(meta.total / limit);

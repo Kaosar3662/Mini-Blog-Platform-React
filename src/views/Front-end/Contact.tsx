@@ -75,9 +75,31 @@ const Contact: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center pt-20 px-4 min-h-[calc(100vh-88px)]">
-          <div className="max-w-2xl w-full mx-auto bg-white rounded-2xl shadow-md px-6 py-8">
-            <h1 className="text-3xl font-semibold mb-6">Contact Us</h1>
+        <div className="max-w-4xl mx-auto min-h-[calc(100vh-88px)] pt-30 pb-20 px-4 space-y-12">
+
+          {/* Hero Section */}
+          <section className="bg-white shadow-md rounded-2xl p-6">
+            <div className="relative rounded-2xl overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1521791136064-7986c2920216"
+                alt="Contact Hero"
+                className="w-full h-[320px] object-cover"
+              />
+              <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center px-6">
+                <h1 className="text-4xl font-bold text-white mb-4">
+                  Contact Us
+                </h1>
+                <p className="text-gray-200 max-w-2xl">
+                  Have a question or idea? We'd love to hear from you.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Contact Form Section */}
+          <section className="bg-white shadow-md rounded-2xl p-8">
+            <h2 className="text-2xl font-semibold mb-6">Send a Message</h2>
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
@@ -141,7 +163,30 @@ const Contact: React.FC = () => {
                 </Button>
               </div>
             </form>
-          </div>
+          </section>
+
+          {/* CTA Section */}
+          <section className="bg-white shadow-md rounded-2xl overflow-hidden">
+            <div className="relative">
+              <img
+                src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4"
+                alt="Contact CTA"
+                className="w-full h-70 object-cover"
+              />
+              <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-center px-6">
+                <h2 className="text-3xl font-semibold text-white mb-4">
+                  Explore Our Blog
+                </h2>
+                <p className="text-gray-200 mb-6 max-w-xl">
+                  Discover articles, ideas, and insights from our latest posts.
+                </p>
+                <Button onClick={() => navigate(`/posts`)} className="rounded-xl">
+                  View All Posts
+                </Button>
+              </div>
+            </div>
+          </section>
+
         </div>
       )}
     </>
